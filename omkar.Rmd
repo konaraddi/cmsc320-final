@@ -1,0 +1,16 @@
+
+
+```{r part1step1, eval=TRUE}
+library(dplyr)
+library(rvest)
+
+url <- "https://pokemondb.net/pokedex/all"
+
+pokedex_table <- url %>%
+  read_html() %>%
+  html_node("table#pokedex") %>%
+  html_table() %>%
+  as.data.frame()
+
+pokedex_table %>% head()
+```
