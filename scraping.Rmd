@@ -1,6 +1,4 @@
-
-
-```{r part1step1, eval=TRUE}
+```{r}
 library(dplyr)
 library(rvest)
 
