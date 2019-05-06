@@ -15,15 +15,22 @@ pokedex.scraped <- url %>%
 pokedex.scraped %>% head()
 ```
 
+We'll filter out the Mega pokemon because they're modified versions of existing pokemon and are almost duplicate pokemon. 
 
-Some pokemon have two types so we'll split the Type column into Type1 and Type2. How do we know how to split it up? Notice that whenever a pokemon has two types, they're types are concatenated and both types are capitalized. We'll use RegEx and tidyr package's `extract` function to split Type into Type1 and Type2.
+```{r}
+pokedex.scraped <- pokedex.scraped %>%
+  filter(grepl("Mega", Name) == FALSE)
+pokedex.scraped
+```
+
+Some pokemon have two types so we'll split the Type column into Type1 and Type2. How do we split up the Type column into two columns? Note that whenever a pokemon has two types, they're types are concatenated and both types are capitalized. We'll use RegEx and tidyr package's `extract` function to split Type into Type1 and Type2.
 
 ```{r}
 library(tidyr)
 pokedex.table <- pokedex.scraped %>% 
   extract(Type, into = c("Type1", "Type2"), 
           "([A-Z][a-z]+)([A-Z][a-z]+)")
-pokedex.table
+pokedex.table %>% head()
 ```
 
 Oh no, some of our pokemon have only one Type and they have NA listed for both Type1 and Type2. That's no biggie, we can just iterate over our pokedex table and add the type back from our initially scraped data.
@@ -36,6 +43,74 @@ for(i in 1:nrow(pokedex.table)) {
 }
 pokedex.table %>% head()
 ```
+
+We'll also need the pokemon height, weight, and capture rate. Let's scrape the height and weight data from https://pokemondb.net/pokedex/stats/height-weight :
+
+```{r}
+url <- "https://pokemondb.net/pokedex/stats/height-weight"
+
+height.weight.scraped <- url %>%
+  read_html() %>%
+  html_node("table.data-table") %>%
+  html_table() %>%
+  as.data.frame() %>%
+  # we can get rid of Type because we already have Type1 and Type2
+  within(rm(Type))
+
+height.weight.scraped %>% head()
+```
+
+Next, we'll join the height and weight columns to our existing pokedex table.
+
+```{r}
+
+pokedex.table <- height.weight.scraped %>%
+  inner_join(pokedex.table, by = "Name") %>%
+  within(rm("#.y")) %>%
+  rename("#" = "#.x")
+
+pokedex.table %>% head()
+```
+
+We'll also want to get the capture rate of each pokemon which we can obtain from https://bulbapedia.bulbagarden.net/wiki/List_of_Pokémon_by_catch_rate
+
+```{r}
+url <- "https://bulbapedia.bulbagarden.net/wiki/List_of_Pokémon_by_catch_rate"
+
+capture.rate.scraped <- url %>%
+  read_html() %>%
+  html_node("table.sortable") %>%
+  html_table() %>%
+  as.data.frame() 
+
+# we'll keep only the columns we need
+capture.rate.scraped <- capture.rate.scraped[c("Name", "Catch rate")]
+capture.rate.scraped %>% head()
+```
+
+Next, we'll join our capture rate with our pokedex table
+
+```{r}
+pokedex.table <- capture.rate.scraped %>%
+  inner_join(pokedex.table, by = "Name")
+pokedex.table
+```
+
+Great! We have everything we need for the rest of this tutorial.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
