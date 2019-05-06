@@ -1,14 +1,41 @@
+# Scraping 
+
 ```{r}
 library(dplyr)
 library(rvest)
 
 url <- "https://pokemondb.net/pokedex/all"
 
-pokedex_table <- url %>%
+pokedex.scraped <- url %>%
   read_html() %>%
   html_node("table#pokedex") %>%
   html_table() %>%
   as.data.frame()
 
-pokedex_table %>% head()
+pokedex.scraped %>% head()
 ```
+
+
+Some pokemon have two types so we'll split the Type column into Type1 and Type2. How do we know how to split it up? Notice that whenever a pokemon has two types, they're types are concatenated and both types are capitalized. We'll use RegEx and tidyr package's `extract` function to split Type into Type1 and Type2.
+
+```{r}
+library(tidyr)
+pokedex.table <- pokedex.scraped %>% 
+  extract(Type, into = c("Type1", "Type2"), 
+          "([A-Z][a-z]+)([A-Z][a-z]+)")
+pokedex.table
+```
+
+Oh no, some of our pokemon have only one Type and they have NA listed for both Type1 and Type2. That's no biggie, we can just iterate over our pokedex table and add the type back from our initially scraped data.
+
+```{r}
+for(i in 1:nrow(pokedex.table)) {
+    if (is.na(pokedex.table$Type1[i])) {
+      pokedex.table$Type1[i] <- pokedex.scraped$Type[i]
+    }
+}
+pokedex.table %>% head()
+```
+
+
+
