@@ -30,6 +30,7 @@ library(tidyr)
 pokedex.table <- pokedex.scraped %>% 
   extract(Type, into = c("Type1", "Type2"), 
           "([A-Z][a-z]+)([A-Z][a-z]+)")
+
 pokedex.table %>% head()
 ```
 
@@ -41,6 +42,10 @@ for(i in 1:nrow(pokedex.table)) {
       pokedex.table$Type1[i] <- pokedex.scraped$Type[i]
     }
 }
+
+pokedex.table$Type1 <- factor(pokedex.table$Type1)
+pokedex.table$Type2 <- factor(pokedex.table$Type2)
+
 pokedex.table %>% head()
 ```
 
