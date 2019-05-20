@@ -83,6 +83,8 @@ capture.rate.scraped <- url %>%
   html_table() %>%
   as.data.frame() %>%
   rename("Catch_rate" = "Catch rate")
+  
+capture.rate.scraped$Catch_rate <- as.numeric(capture.rate.scraped$Catch_rate)
 
 # we'll keep only the columns we need
 capture.rate.scraped <- capture.rate.scraped[c("Name", "Catch_rate")]

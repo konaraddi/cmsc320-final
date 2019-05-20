@@ -1,0 +1,66 @@
+# Random Forest for Classifying Legendaries
+
+Can we use a Random Forest to classify legendaries?
+
+First, we'll label our data set with legendaries using the list here: https://bulbapedia.bulbagarden.net/wiki/Legendary_Pokémon
+
+```{r}
+legendaries = c("Zapdos", "Articuno", "Moltres", "Mewtwo",
+                "Mew", "Raikou", "Entei", "Suicune", 
+                "Lugia", "Celebi", 
+                "Regirock", "Regice", "Registeel",
+                "Latias", "Latios", "Kyogre", "Groudon", "Rayquaza",
+                "Jirachi", "Uxie", "Mesprit", "Azelf", "Dialga", 
+                "Palkia", "Heatran", "Regigigas", "Giratina", 
+                "Cresselia", "Phione", "Manaphy", "Darkrai",
+                "Arceus", "Victini", "Reshiram", "Zekrom", 
+                "Kyurem", "Genesect")
+
+df <- pokedex.table
+df$isLegendary <- FALSE
+
+for (i in 1:length(legendaries)) {
+  df$isLegendary[df$Name == legendaries[i]] <- TRUE
+}
+
+```
+
+```{r}
+library(randomForest)
+
+trainingData <- df[df$Gen == 2 | df$Gen == 4 | df$Gen == 6, ]
+trainingData
+testData <- df[df$Gen == 1 | df$Gen == 3 | df$Gen == 5, ]
+testData
+
+set.seed(1234)
+
+rf <- randomForest(isLegendary ~ Total + Catch_rate, importance = TRUE, mtry=2, data = trainingData, na.action=na.exclude)
+
+#rf
+
+test.labels <- testData[, "isLegendary"]
+
+predictions <- predict(rf, testData[c("Total", "Catch_rate")])
+table(predictions, test.labels)
+```
+
+```{r}
+testData$Prediction <- predictions
+testData.subset <- testData %>%
+  select(Name, Total, Catch_rate, isLegendary, Prediction)
+```
+
+```{r}
+# filter for FP
+testData.subset %>%
+  filter(Prediction == TRUE & isLegendary == FALSE)
+```
+
+Metagross is pseudo-legendary (https://bulbapedia.bulbagarden.net/wiki/Pseudo-legendary_Pok%C3%A9mon)
+
+```{r}
+df %>%
+  filter(!is.na(Type2)) %>%
+  select(Name, Type1, Type2)
+```
