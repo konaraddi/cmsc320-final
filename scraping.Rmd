@@ -119,6 +119,8 @@ for (i in 1:nrow(pokedex.table)) {
     }
   }
 }
+pokedex.table$Gen <- factor(pokedex.table$Gen)
+
 pokedex.table %>% head()
 ```
 
