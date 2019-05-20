@@ -75,7 +75,7 @@ pokedex.table %>% head()
 We'll also want to get the capture rate of each pokemon which we can obtain from https://bulbapedia.bulbagarden.net/wiki/List_of_Pokémon_by_catch_rate
 
 ```{r}
-url <- "https://bulbapedia.bulbagarden.net/wiki/List_of_Pokémon_by_catch_rate"
+url <- "https://bulbapedia.bulbagarden.net/wiki/List_of_Pokemon_by_catch_rate"
 
 capture.rate.scraped <- url %>%
   read_html() %>%
