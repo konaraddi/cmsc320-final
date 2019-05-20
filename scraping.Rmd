@@ -96,6 +96,32 @@ pokedex.table <- capture.rate.scraped %>%
 pokedex.table
 ```
 
+We'll also add the Generation Number for each Pokemon. We can use this to explore the differences between newer and older Pokemon generations. We can figure out which Generation each Pokemon belongs to by using each Pokemon's Pokedex number and checking which Generation it belongs in. 
+
+Generation I - #001-151
+Generation II - #152-251
+Generation III - #252-386
+Generation IV - #387-493
+Generation V - #494-649
+Generation VI - #650-721
+Generation VII - #722-809
+
+Source: https://en.wikipedia.org/wiki/List_of_Pok%C3%A9mon#Detailed_lists_by_generation
+
+```{r}
+ranges = c(1,152,252,387,494,650,722)
+
+for (i in 1:nrow(pokedex.table)) {
+  for (g in length(ranges):1) {
+    if (pokedex.table$`#`[i] >= ranges[g]) {
+      pokedex.table$Gen[i] <- g
+      break
+    }
+  }
+}
+pokedex.table %>% head()
+```
+
 Great! We have everything we need for the rest of this tutorial.
 
 
