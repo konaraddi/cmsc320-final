@@ -81,10 +81,11 @@ capture.rate.scraped <- url %>%
   read_html() %>%
   html_node("table.sortable") %>%
   html_table() %>%
-  as.data.frame() 
+  as.data.frame() %>%
+  rename("Catch_rate" = "Catch rate")
 
 # we'll keep only the columns we need
-capture.rate.scraped <- capture.rate.scraped[c("Name", "Catch rate")]
+capture.rate.scraped <- capture.rate.scraped[c("Name", "Catch_rate")]
 capture.rate.scraped %>% head()
 ```
 
