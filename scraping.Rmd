@@ -10,7 +10,9 @@ pokedex.scraped <- url %>%
   read_html() %>%
   html_node("table#pokedex") %>%
   html_table() %>%
-  as.data.frame()
+  as.data.frame() %>%
+  rename("Sp.Atk" = "Sp. Atk") %>%
+  rename("Sp.Def" = "Sp. Def")
 
 pokedex.scraped %>% head()
 ```
@@ -60,7 +62,9 @@ height.weight.scraped <- url %>%
   html_table() %>%
   as.data.frame() %>%
   # we can get rid of Type because we already have Type1 and Type2
-  within(rm(Type))
+  within(rm(Type))  %>%
+  rename("Height_m" = "Height (m)") %>%
+  rename("Weight_kgs"= "Weight (kgs)") 
 
 height.weight.scraped %>% head()
 ```
@@ -88,6 +92,7 @@ capture.rate.scraped <- url %>%
   html_table() %>%
   as.data.frame() %>%
   rename("Catch_rate" = "Catch rate")
+  
   
 capture.rate.scraped$Catch_rate <- as.numeric(capture.rate.scraped$Catch_rate)
 
