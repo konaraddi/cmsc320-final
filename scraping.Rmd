@@ -24,7 +24,7 @@ We'll filter out the Mega pokemon because they're modified versions of existing 
 ```{r}
 pokedex.scraped <- pokedex.scraped %>%
   filter(grepl("Mega", Name) == FALSE)
-pokedex.scraped
+pokedex.scraped %>% head()
 ```
 
 Some pokemon have two types so we'll split the Type column into Type1 and Type2. How do we split up the Type column into two columns? Note that whenever a pokemon has two types, they're types are concatenated and both types are capitalized. We'll use RegEx and tidyr package's `extract` function to split Type into Type1 and Type2.
@@ -108,7 +108,7 @@ Next, we'll join our capture rate with our pokedex table
 ```{r}
 pokedex.table <- capture.rate.scraped %>%
   inner_join(pokedex.table, by = "Name")
-pokedex.table
+pokedex.table %>% head()
 ```
 
 We'll also add the Generation Number for each Pokemon. We can use this to explore the differences between newer and older Pokemon generations. We can figure out which Generation each Pokemon belongs to by using each Pokemon's Pokedex number and check which Generation it belongs in. 

@@ -1,0 +1,23 @@
+---  
+title: CMSC320 Final Project  
+output: 
+  html_document:
+    toc: no
+---
+
+```{r child = 'scraping.Rmd'}
+```
+
+```{r child = 'anova_generation_similarity.Rmd'}
+```
+
+```{r child = 'random_forest_legendaries.Rmd'}
+```
+
+```{r child = 'random_forest_type1.Rmd'}
+```
+
+```{r child = 'random_forest_type2.Rmd'}
+```
+
+
