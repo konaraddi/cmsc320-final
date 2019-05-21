@@ -36,5 +36,5 @@ accuracy
 ```
 
 
-Our random forest correctly guesses the Type2 for about 32% of the Pokemon. It seems like we can't consistently predict a Pokemon's Type2 based on its stats, although we have a much higher rate then predicting Type 1. Oddly enough, it appears that it got 38/43 on flying types, so it may seem like some data is correlated.
+Our random forest correctly guesses the Type2 for about 28-32% of the Pokemon. It seems like we can't consistently predict a Pokemon's Type2 based on its stats, although we have a much higher rate then predicting Type 1. Oddly enough, it appears that it got 35-38 out of 43 on flying types, so it may seem like some data is correlated.
 
