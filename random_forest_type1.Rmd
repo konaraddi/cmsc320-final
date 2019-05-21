@@ -1,30 +1,34 @@
-# Using Random Forest to predict Type1
+# Using Random Forest to predict each Pokemon's Type1
+
+Can we use a Random Forest to predict a Pokemon's Type1? We'll use various attributes of each Pokemon to see if we can predict their Type1.
+
+First we split our data into training and testing sets. Our training set will be Generations 2, 4, and 6. Our test set will be Generations 1, 3, and 5.
 
 ```{r}
-pokedex.table %>% head()
 df <- pokedex.table
-```
-
-
-```{r}
-library(randomForest)
-
 trainingData <- df[df$Gen == 2 | df$Gen == 4 | df$Gen == 6, ]
 trainingData %>% head()
 testData <- df[df$Gen == 1 | df$Gen == 3 | df$Gen == 5, ]
 testData %>% head()
-
-set.seed(1234)
 ```
 
-```{r}
-rf <- randomForest(Type1 ~ Catch_rate + Height_m + Weight_kgs + HP + Attack + Defense + Sp.Atk+ Sp.Def + Speed + Gen, importance = TRUE, mtry=1, data = trainingData, na.action=na.exclude)
+Our random forest will take into consideration all variables except for BMI (since we're already considering Height and Weight), Type2 (we're only trying to predict Type1 and some Pokemon don't have a Type2), and we're not using Total since we'll be using each individual base stat.
 
+```{r}
+library(randomForest)
+set.seed(1234)
+
+rf <- randomForest(Type1 ~ Catch_rate + Height_m + Weight_kgs + HP + Attack + Defense + Sp.Atk+ Sp.Def + Speed + Gen, importance = TRUE, mtry=1, data = trainingData, na.action=na.exclude)
+```
+
+After we train the model on our training data, we check whether we can predict the Type1 in our test set.
+
+```{r}
 actuals <- testData[, "Type1"]
 predictions <- predict(rf, testData)
 
 pre.act.df <- as.data.frame(table(predictions, actuals))
-pre.act.df %>% filter(Freq > 0) #%>% head()
+pre.act.df %>% filter(Freq > 0) %>% head()
 
 correct.predictions <- nrow(pre.act.df[pre.act.df$predictions == pre.act.df$actuals,])
 accuracy <- correct.predictions / nrow(pre.act.df[pre.act.df$Freq > 0,])
@@ -32,7 +36,7 @@ accuracy
 ```
 
 
-Our random forest correctly guesses the Type1 for 15-17% of the Pokemon. It seems like we can't consistently predict a Pokemon's Type1 based on its stats.
+Our random forest correctly guesses the Type1 for 15-17% of the Pokemon. It seems like we can't consistently predict a Pokemon's Type1 using a random forest on its attributes.
 
 
 
