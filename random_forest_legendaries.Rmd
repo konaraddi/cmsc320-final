@@ -18,11 +18,10 @@ legendaries = c("Zapdos", "Articuno", "Moltres", "Mewtwo",
 
 df <- pokedex.table
 df$isLegendary <- FALSE
-
 for (i in 1:length(legendaries)) {
   df$isLegendary[df$Name == legendaries[i]] <- TRUE
 }
-
+df$isLegendary <- factor(df$isLegendary)
 ```
 
 ```{r}
