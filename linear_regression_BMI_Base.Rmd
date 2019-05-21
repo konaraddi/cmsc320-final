@@ -3,13 +3,14 @@ Now, we are gonna answer the following question: How does height and weight (in 
 To do so, we're gonna use a linear regression model that plots the BMI vs. the Total. Right now, the total is defined as the sum of all the base stats, which include HP, Attack, Defense, Sp. Atk, Sp. Def, and speed. BMI, or Body Mass Index, is calculated as the kg/m^2. Let's plot the graph of BMI vs. the Total Base Stats using ggplot(). 
 
 ```{r BMI}
+  library(tidyverse)
+  library(broom)
   pokedex <- pokedex.table
   
   pokedex %>%
   ggplot(aes(x=as.numeric(BMI), y=Total)) +
     geom_point() +
     geom_smooth(method=lm) +
-    theme_minimal() + 
     labs(title="BMI vs. Total Base Stats",
          x = "BMI",
          y = "Total Base Stats")
