@@ -68,7 +68,7 @@ total <- rbind(total, slice(typeless_pokedex, 1))
 temp <-  slice(typeless_pokedex, 1)
 previous_type1 <- temp$Type1[1]
 
-typeless_pokedex <- unlegendary_pokedex %>% select(Name, Type1, Total) %>% filter(Type1 != "Water")%>% filter(Type1 != "Fire")%>% filter(Type1 != "Grass") %>% filter(Type1 != previous_type) %>% arrange(desc(Total))
+typeless_pokedex <- unlegendary_pokedex %>% select(Name, Type1, Total) %>% filter(Type1 != "Water")%>% filter(Type1 != "Fire")%>% filter(Type1 != "Grass") %>% filter(Type1 != previous_type1) %>% arrange(desc(Total))
 
 total <- rbind(total, slice(typeless_pokedex, 1))
 temp <-  slice(typeless_pokedex, 1)

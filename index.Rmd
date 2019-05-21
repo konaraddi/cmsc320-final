@@ -8,6 +8,9 @@ output:
 ```{r child = 'scraping.Rmd'}
 ```
 
+```{r child = 'anova_generation_similarity.Rmd'}
+```
+
 ```{r child = 'anova_generation_similarity2.Rmd'}
 ```
 
@@ -20,12 +23,7 @@ output:
 ```{r child = 'linear_regression_BMI_capturerate.Rmd'}
 ```
 
-```{r child = 'pickOptimalTeam.Rmd'}
-
-```{r child = 'anova_generation_similarity.Rmd'}
-```
-
-```{r child = 'random_forest_legendaries.Rmd'}
+```{r child = 'PickOptimalTeam.Rmd'}
 ```
 
 ```{r child = 'random_forest_type1.Rmd'}
@@ -34,7 +32,7 @@ output:
 ```{r child = 'random_forest_type2.Rmd'}
 ```
 
-
+```{r child = 'random_forest_legendaries.Rmd'}
 ```
 
 

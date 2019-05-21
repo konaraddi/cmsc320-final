@@ -3,6 +3,7 @@
 Are Pokemon across all generations similar to one another? Do newer generations have better stats than previous generations? It's intuitive to think that newer Pokemon would be better than older Pokemon but we'll test our intuition using an ANOVA/F hypothesis test.
 
 In this section we investigate the similarity amongst Attack Damage
+
 ## Attack
 
 Do newer generations have more Attack damage) than previous generations?
@@ -10,6 +11,8 @@ Do newer generations have more Attack damage) than previous generations?
 First, let's take a look at the average attack for each generation:
 
 ```{r}
+library(dplyr)
+
 pokedex.table %>%
   group_by(Gen) %>%
   summarise(average_attack = mean(Attack))
@@ -26,5 +29,5 @@ res.aov <- aov(Attack ~ Gen, data = pokedex.table)
 summary(res.aov)
 ```
 
-We can see here that we have received a F-value of 4.525 which generates a p-value extremely small (0.000161. Therefore, we have sufficient evidence to reject the null hypothesis ($$H_o$$). We conclude that at least two generates vary with their attack. 
+We can see here that we have received a F-value of 4.525 which generates a p-value extremely small (0.000161. Therefore, we have sufficient evidence to reject the null hypothesis ($$H_o$$). We conclude that at least two generations vary with their attack. 
 

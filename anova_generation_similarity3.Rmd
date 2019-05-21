@@ -3,9 +3,10 @@
 Are Pokemon across all generations similar to one another? Do newer generations have better stats than previous generations? It's intuitive to think that newer Pokemon would be better than older Pokemon but we'll test our intuition using an ANOVA/F hypothesis test.
 
 In this section we investigate the similarity amongst Defense Damage
+
 ## Defense
 
-Do newer generations have more Defense damage) than previous generations?
+Do newer generations have more Defense damage than previous generations?
 
 First, let's take a look at the average Defense for each generation:
 

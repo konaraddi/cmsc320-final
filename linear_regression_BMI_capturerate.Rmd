@@ -23,7 +23,7 @@ As can be seen by the above plot, there really does not seem to be a strong inte
 Let us still see what we get for the equation after generating a linear regression model. 
 
 
-```{r equation}
+```{r equa}
 auto_fit1 <- lm(Catch_rate ~ as.numeric(BMI), data=pokedex.table)
 auto_fit1
 ```
