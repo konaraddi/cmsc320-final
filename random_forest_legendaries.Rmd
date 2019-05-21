@@ -58,8 +58,3 @@ testData.subset %>%
 
 Metagross is pseudo-legendary (https://bulbapedia.bulbagarden.net/wiki/Pseudo-legendary_Pok%C3%A9mon)
 
-```{r}
-df %>%
-  filter(!is.na(Type2)) %>%
-  select(Name, Type1, Type2)
-```
