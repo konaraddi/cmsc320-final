@@ -1,0 +1,40 @@
+# Using Random Forest to predict Type2
+
+We're gonna use the Random Forest Model to see if we can use the various different stats of each Pokemon to see if we can predict its Type2. To do so we're gonna filter out all of the Pokemon that don't have a Type2, so that the model doesn't get confused at all the NA Values. 
+
+```{r}
+pokedex.table %>% head()
+df <- pokedex.table
+df <- df %>% filter(!is.na(Type2))
+df
+```
+
+Now that we've got that settled, we're gonna use our training data set to be Generations 2, 4, and 6. The main reason for picking these generations is because they ensure that all types of pokemon are being looked at -- for example, generation 2 introduces Dark and Silver type Pokemon, while Generation 6 introduces Fairy type Pokemon. To test, we'll set our Pokemon data to be Generations 1, 3 and 5. 
+```{r}
+library(randomForest)
+
+trainingData <- df[df$Gen == 2 | df$Gen == 4 | df$Gen == 6, ]
+trainingData %>% head()
+testData <- df[df$Gen == 1 | df$Gen == 3 | df$Gen == 5, ]
+testData %>% head()
+
+set.seed(1234)
+```
+Here, we're gonna tell the model to look at Catch Rate, Height, Weight, HP, Attack, Defense, Sp. Atk, Sp. Def, Generation, and its Type to try and classify its Type 2. 
+```{r}
+rf <- randomForest(Type2 ~ Catch_rate + Height_m + Weight_kgs + HP + Attack + Defense + Sp.Atk+ Sp.Def + Speed + Gen + Type1, importance = TRUE, mtry=1, data = trainingData, na.action=na.exclude)
+
+actuals <- testData[, "Type2"]
+predictions <- predict(rf, testData)
+
+pre.act.df <- as.data.frame(table(predictions, actuals))
+pre.act.df %>% filter(Freq > 0) #%>% head()
+
+correct.predictions <- nrow(pre.act.df[pre.act.df$predictions == pre.act.df$actuals,])
+accuracy <- correct.predictions / nrow(pre.act.df[pre.act.df$Freq > 0,])
+accuracy
+```
+
+
+Our random forest correctly guesses the Type2 for about 28-32% of the Pokemon. It seems like we can't consistently predict a Pokemon's Type2 based on its stats, although we have a much higher rate then predicting Type 1. Oddly enough, it appears that it got 35-38 out of 43 on flying types, so it may seem like some data is correlated.
+
