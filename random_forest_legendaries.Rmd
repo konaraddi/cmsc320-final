@@ -14,7 +14,8 @@ legendaries = c("Zapdos", "Articuno", "Moltres", "Mewtwo",
                 "Palkia", "Heatran", "Regigigas", "Giratina", 
                 "Cresselia", "Phione", "Manaphy", "Darkrai",
                 "Arceus", "Victini", "Reshiram", "Zekrom", 
-                "Kyurem", "Genesect")
+                "Kyurem", "Genesect", 
+                "Cobalion" , "Terrakion", "Virizion")
 
 df <- pokedex.table
 df$isLegendary <- FALSE
@@ -24,37 +25,53 @@ for (i in 1:length(legendaries)) {
 df$isLegendary <- factor(df$isLegendary)
 ```
 
+Next, we'll split our data set into training and testing data. We'll train the random forest on Generations 2, 4, and 6 then test it out on 1, 3, and 5.
+
 ```{r}
 library(randomForest)
 
 trainingData <- df[df$Gen == 2 | df$Gen == 4 | df$Gen == 6, ]
-trainingData
+trainingData %>% head()
 testData <- df[df$Gen == 1 | df$Gen == 3 | df$Gen == 5, ]
-testData
+testData %>% head()
+```
 
+Our random forest will use the `Total` and `Catch_rate` columns to predict whether a Pokemon is a legendary Pokemon. We use `Total` and `Catch_rate` because we know legendaries are usually very powerful Pokemon that are difficult to catch.
+
+```{r}
 set.seed(1234)
 
 rf <- randomForest(isLegendary ~ Total + Catch_rate, importance = TRUE, mtry=2, data = trainingData, na.action=na.exclude)
+rf
+```
 
-#rf
+Now we'll check out the performance of our random forest model
 
+```{r}
 test.labels <- testData[, "isLegendary"]
-
-predictions <- predict(rf, testData[c("Total", "Catch_rate")])
+predictions <- predict(rf, testData)
 table(predictions, test.labels)
 ```
+
+Our random forest was able to predict 16/17 legendaries in the test set. That's pretty good! Let's see which legendary Pokemon we missed, our only false negative, and which Pokemon were our 3 false positives.
 
 ```{r}
 testData$Prediction <- predictions
 testData.subset <- testData %>%
   select(Name, Total, Catch_rate, isLegendary, Prediction)
-```
 
-```{r}
-# filter for FP
+# filter for false negative
+testData.subset %>%
+  filter(Prediction == FALSE & isLegendary == TRUE)
+
+# filter for false positives
 testData.subset %>%
   filter(Prediction == TRUE & isLegendary == FALSE)
 ```
 
-Metagross is pseudo-legendary (https://bulbapedia.bulbagarden.net/wiki/Pseudo-legendary_Pok%C3%A9mon)
+Mew was our false negative. This is reasonably hard to predict because Mew is unusually easy to catch for being a legendary Pokemon. This is probably why the random forest couldn't predict it was legendary.
+
+Beldum, Metang, and Metagross are the first, second, and third evoluation stages of the same Pokemon. Metagross, the final evolution, has battle stats that are on par with legendary Pokemon but is technically not considered legendary. Metagross is one of the [pseudo-legendary](https://bulbapedia.bulbagarden.net/wiki/Pseudo-legendary_Pokémon) Pokemon.
+
+Overall, our random forest proved to be good at classifying legendaries based on the `Total` and `Catch_rate`.
 
