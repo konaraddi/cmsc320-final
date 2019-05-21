@@ -1,7 +1,3 @@
-# Testing Similarity across Generations with the ANOVA/F-test
-
-Are Pokemon across all generations similar to one another? Do newer generations have better stats than previous generations? It's intuitive to think that newer Pokemon would be better than older Pokemon but we'll test our intuition using an ANOVA/F hypothesis test.
-
 ## HP
 
 Do newer generations have more HP (Health Points) than previous generations?
@@ -16,13 +12,13 @@ pokedex.table %>%
 
 We can see some variation in the HP across generations; Generation IV Pokemon have, on average, around 8 more HP than the Generation I Pokemon. But is this statistically significant? Let's use the ANOVA/F-test at 5% level of significance.
 
-$$H_o = $$ no difference between true average HP across generations
-$$H_a = $$ at least two generations' average HP are different
+$H_o = $ no difference between true average HP across generations
+$H_a = $ at least two generations' average HP are different
 
 ```{r}
 res.aov <- aov(HP ~ Gen, data = pokedex.table)
 summary(res.aov)
 ```
 
-We can see that there's a 14.9% of us seeing values as extreme as the above which is greater than our 5% level of significance. Therefore, we do not reject the null hypothesis ($$H_o$$). We conclude that the generations do not vary in HP at 5% level of significance.
+We can see that there's a 14.9% of us seeing values as extreme as the above which is greater than our 5% level of significance. Therefore, we do not reject the null hypothesis ($H_o$). We conclude that the generations do not vary in HP at 5% level of significance.
 

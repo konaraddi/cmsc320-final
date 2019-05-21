@@ -5,8 +5,16 @@ output:
     toc: no
 ---
 
+**written by Dinakar Chappa, Prashant Krishnan and Omkar Konaraddi**
+
+In this tutorial, we'll glean rich insights from the [Pokedex](https://pokedex.org/), a database of all Pokemon and their attributes, using various techniques and tools from CMSC320.
+
 ```{r child = 'scraping.Rmd'}
 ```
+
+# Testing Similarity across Generations with the ANOVA/F-test
+
+Are Pokemon across all generations similar to one another? Do newer generations have better stats than previous generations? It's intuitive to think that newer Pokemon would be better than older Pokemon but we'll test our intuition using an ANOVA/F hypothesis test.
 
 ```{r child = 'anova_generation_similarity.Rmd'}
 ```
@@ -16,6 +24,8 @@ output:
 
 ```{r child = 'anova_generation_similarity3.Rmd'}
 ```
+
+# Linear Regression
 
 ```{r child = 'linear_regression_BMI_Base.Rmd'}
 ```

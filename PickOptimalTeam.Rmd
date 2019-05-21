@@ -27,7 +27,7 @@ for (i in 1:length(legendaries)) {
   df$isLegendary[df$Name == legendaries[i]] <- TRUE
 }
 df$isLegendary <- factor(df$isLegendary)
-df
+df %>% head()
 
 ```
 In this section, we begin the process of filtering the dataframe. The first step is the remove all the isLegendary pokemon we marked in the beginning of the list. 

@@ -373,8 +373,10 @@ $(document).ready(function () {
 </div>
 
 
-<div id="scraping" class="section level1">
-<h1>Scraping</h1>
+<p><strong>written by Dinakar Chappa, Prashant Krishnan and Omkar Konaraddi</strong></p>
+<p>In this tutorial, we’ll glean rich insights from the <a href="https://pokedex.org/">Pokedex</a>, a database of all Pokemon and their attributes, using various techniques and tools from CMSC320.</p>
+<div id="scraping-the-data" class="section level1">
+<h1>Scraping the data</h1>
 <p>First we’ll scrape data on Pokemon from <a href="https://pokemondb.net/pokedex/all" class="uri">https://pokemondb.net/pokedex/all</a></p>
 <pre class="r"><code>library(dplyr)
 library(rvest)
@@ -538,15 +540,15 @@ pokedex.table %&gt;% head()</code></pre>
 ## 5 15.7  Fire   &lt;NA&gt;   405 58     64      58     80     65    80
 ## 6 31.3  Fire Flying   534 78     84      78    109     85   100</code></pre>
 <p>We’ll also add the Generation Number for each Pokemon. We can use this to explore the differences between newer and older Pokemon generations. We can figure out which Generation each Pokemon belongs to by using each Pokemon’s Pokedex number and check which Generation it belongs in.</p>
-<div id="generation-number-pokedex-range" class="section level2">
-<h2>| Generation Number | Pokedex Range |</h2>
-<div class="line-block">Generation I | #001-151 |<br />
-Generation II | #152-251 |<br />
-Generation III | #252-386 |<br />
-Generation IV | #387-493 |<br />
-Generation V | #494-649 |<br />
-Generation VI | #650-721 |<br />
-Generation VII | #722-809 |</div>
+<ul>
+<li>Generation I: #001-151</li>
+<li>Generation II: #152-251</li>
+<li>Generation III: #252-386</li>
+<li>Generation IV: #387-493</li>
+<li>Generation V: #494-649</li>
+<li>Generation VI: #650-721</li>
+<li>Generation VII: #722-809</li>
+</ul>
 <p>Source: <a href="https://en.wikipedia.org/wiki/List_of_Pok%C3%A9mon#Detailed_lists_by_generation" class="uri">https://en.wikipedia.org/wiki/List_of_Pok%C3%A9mon#Detailed_lists_by_generation</a></p>
 <pre class="r"><code>ranges = c(1,152,252,387,494,650,722)
 
@@ -577,7 +579,6 @@ pokedex.table %&gt;% head()</code></pre>
 ## 6 31.3  Fire Flying   534 78     84      78    109     85   100   1</code></pre>
 <p>Great! We have everything we need for the rest of this tutorial.</p>
 </div>
-</div>
 <div id="testing-similarity-across-generations-with-the-anovaf-test" class="section level1">
 <h1>Testing Similarity across Generations with the ANOVA/F-test</h1>
 <p>Are Pokemon across all generations similar to one another? Do newer generations have better stats than previous generations? It’s intuitive to think that newer Pokemon would be better than older Pokemon but we’ll test our intuition using an ANOVA/F hypothesis test.</p>
@@ -599,22 +600,17 @@ pokedex.table %&gt;% head()</code></pre>
 ## 6 6           68.6
 ## 7 7           71.4</code></pre>
 <p>We can see some variation in the HP across generations; Generation IV Pokemon have, on average, around 8 more HP than the Generation I Pokemon. But is this statistically significant? Let’s use the ANOVA/F-test at 5% level of significance.</p>
-<p><span class="math display">\[H_o = \]</span> no difference between true average HP across generations <span class="math display">\[H_a = \]</span> at least two generations’ average HP are different</p>
+<p>$H_o = $ no difference between true average HP across generations $H_a = $ at least two generations’ average HP are different</p>
 <pre class="r"><code>res.aov &lt;- aov(HP ~ Gen, data = pokedex.table)
 summary(res.aov)</code></pre>
 <pre><code>##              Df Sum Sq Mean Sq F value Pr(&gt;F)
 ## Gen           6   6452  1075.3   1.584  0.149
 ## Residuals   779 528799   678.8</code></pre>
-<p>We can see that there’s a 14.9% of us seeing values as extreme as the above which is greater than our 5% level of significance. Therefore, we do not reject the null hypothesis (<span class="math display">\[H_o\]</span>). We conclude that the generations do not vary in HP at 5% level of significance.</p>
+<p>We can see that there’s a 14.9% of us seeing values as extreme as the above which is greater than our 5% level of significance. Therefore, we do not reject the null hypothesis (<span class="math inline">\(H_o\)</span>). We conclude that the generations do not vary in HP at 5% level of significance.</p>
 </div>
-</div>
-<div id="testing-similarity-across-generations-with-the-anovaf-test-1" class="section level1">
-<h1>Testing Similarity across Generations with the ANOVA/F-test</h1>
-<p>Are Pokemon across all generations similar to one another? Do newer generations have better stats than previous generations? It’s intuitive to think that newer Pokemon would be better than older Pokemon but we’ll test our intuition using an ANOVA/F hypothesis test.</p>
-<p>In this section we investigate the similarity amongst Attack Damage</p>
 <div id="attack" class="section level2">
 <h2>Attack</h2>
-<p>Do newer generations have more Attack damage) than previous generations?</p>
+<p>Do newer generations have more Attack than previous generations?</p>
 <p>First, let’s take a look at the average attack for each generation:</p>
 <pre class="r"><code>library(dplyr)
 
@@ -632,7 +628,7 @@ pokedex.table %&gt;%
 ## 6 6               72.1
 ## 7 7               85.7</code></pre>
 <p>We can already tell that there seems to be some variation in the average attack across generations. We can see that average attack of generation VII are more than 10 than the average of Gen I. At the same time however, we see that gen I, III, and VI are almost exactly the same with their average attack. The Question remains however if this variation is statistically significant? Let’s use the ANOVA/F-test at 5% level of significance.</p>
-<p><span class="math display">\[H_o = \]</span> no difference between true average attack across generations <span class="math display">\[H_a = \]</span> at least two generations’ average attack are different</p>
+<p>$H_o = $ no difference between true average attack across generations $H_a = $ at least two generations’ average attack are different</p>
 <pre class="r"><code>res.aov &lt;- aov(Attack ~ Gen, data = pokedex.table)
 summary(res.aov)</code></pre>
 <pre><code>##              Df Sum Sq Mean Sq F value   Pr(&gt;F)    
@@ -640,16 +636,11 @@ summary(res.aov)</code></pre>
 ## Residuals   779 657084     843                     
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<p>We can see here that we have received a F-value of 4.525 which generates a p-value extremely small (0.000161. Therefore, we have sufficient evidence to reject the null hypothesis (<span class="math display">\[H_o\]</span>). We conclude that at least two generations vary with their attack.</p>
+<p>We can see here that we have received a F-value of 4.525 which generates a p-value extremely small (0.000161. Therefore, we have sufficient evidence to reject the null hypothesis (<span class="math inline">\(H_o\)</span>). We conclude that at least two generations vary with their attack.</p>
 </div>
-</div>
-<div id="testing-similarity-across-generations-with-the-anovaf-test-2" class="section level1">
-<h1>Testing Similarity across Generations with the ANOVA/F-test</h1>
-<p>Are Pokemon across all generations similar to one another? Do newer generations have better stats than previous generations? It’s intuitive to think that newer Pokemon would be better than older Pokemon but we’ll test our intuition using an ANOVA/F hypothesis test.</p>
-<p>In this section we investigate the similarity amongst Defense Damage</p>
 <div id="defense" class="section level2">
 <h2>Defense</h2>
-<p>Do newer generations have more Defense damage than previous generations?</p>
+<p>Do newer generations have more Defense than previous generations?</p>
 <p>First, let’s take a look at the average Defense for each generation:</p>
 <pre class="r"><code>pokedex.table %&gt;%
   group_by(Gen) %&gt;%
@@ -665,13 +656,17 @@ summary(res.aov)</code></pre>
 ## 6 6                73.0
 ## 7 7                79.4</code></pre>
 <p>We can already tell that there seems to be some variation in the average Defense across generations. Unlike the other two ANOVA tests we ran, however, the difference in defense seems to be somewhat marginal. The largest gap we see is between generation VII and gen I (again) where we see a defense gap of almost 10 points. The Question remains however if this variation is statistically significant? Let’s use the ANOVA/F-test at 5% level of significance.</p>
-<p><span class="math display">\[H_o = \]</span> no difference between true average Defense across generations <span class="math display">\[H_a = \]</span> at least two generations’ average Defense are different</p>
+<p>$H_o = $ no difference between true average Defense across generations $H_a = $ at least two generations’ average Defense are different</p>
 <pre class="r"><code>res.aov &lt;- aov(Defense ~ Gen, data = pokedex.table)
 summary(res.aov)</code></pre>
 <pre><code>##              Df Sum Sq Mean Sq F value Pr(&gt;F)
 ## Gen           6   9254  1542.3   1.748  0.107
 ## Residuals   779 687530   882.6</code></pre>
 <p>We can see here that we have received a F-value of 0.107 which generated a p-value of 0.107. Since our p-value is greater than our level of significance at 0.05, we have insufficient evidence to reject the null hypothesis. We conclude that the average defense amongst generations remains relatively consistent.</p>
+</div>
+</div>
+<div id="linear-regression" class="section level1">
+<h1>Linear Regression</h1>
 <p>Now, we are gonna answer the following question: How does height and weight (in other words, BMI) of a Pokemon correlate with its various base stats?</p>
 <p>To do so, we’re gonna use a linear regression model that plots the BMI vs. the Total. Right now, the total is defined as the sum of all the base stats, which include HP, Attack, Defense, Sp. Atk, Sp. Def, and speed. BMI, or Body Mass Index, is calculated as the kg/m^2. Let’s plot the graph of BMI vs. the Total Base Stats using ggplot().</p>
 <pre class="r"><code>  library(tidyverse)
@@ -791,167 +786,28 @@ for (i in 1:length(legendaries)) {
   df$isLegendary[df$Name == legendaries[i]] &lt;- TRUE
 }
 df$isLegendary &lt;- factor(df$isLegendary)
-df</code></pre>
-<pre><code>##             Name Catch_rate   # Height (ft) Height_m Weight (lbs)
-## 1      Bulbasaur         45   1       2′04″      0.7         15.2
-## 2        Ivysaur         45   2       3′03″      1.0         28.7
-## 3       Venusaur         45   3       6′07″      2.0        220.5
-## 4     Charmander         45   4       2′00″      0.6         18.7
-## 5     Charmeleon         45   5       3′07″      1.1         41.9
-## 6      Charizard         45   6       5′07″      1.7        199.5
-## 7       Squirtle         45   7       1′08″      0.5         19.8
-## 8      Wartortle         45   8       3′03″      1.0         49.6
-## 9      Blastoise         45   9       5′03″      1.6        188.5
-## 10      Caterpie        255  10       1′00″      0.3          6.4
-## 11       Metapod        120  11       2′04″      0.7         21.8
-## 12    Butterfree         45  12       3′07″      1.1         70.5
-## 13        Weedle        255  13       1′00″      0.3          7.1
-## 14        Kakuna        120  14       2′00″      0.6         22.0
-## 15      Beedrill         45  15       3′03″      1.0         65.0
-## 16        Pidgey        255  16       1′00″      0.3          4.0
-## 17     Pidgeotto        120  17       3′07″      1.1         66.1
-## 18       Pidgeot         45  18       4′11″      1.5         87.1
-## 19       Rattata        255  19       1′00″      0.3          7.7
-## 20      Raticate         NA  20       2′04″      0.7         40.8
-## 21       Spearow        255  21       1′00″      0.3          4.4
-## 22        Fearow         90  22       3′11″      1.2         83.8
-## 23         Ekans        255  23       6′07″      2.0         15.2
-## 24         Arbok         90  24      11′06″      3.5        143.3
-## 25       Pikachu         NA  25       1′04″      0.4         13.2
-## 26        Raichu         75  26       2′07″      0.8         66.1
-## 27     Sandshrew        255  27       2′00″      0.6         26.5
-## 28     Sandslash         90  28       3′03″      1.0         65.0
-## 29      Nidoran♀        235  29       1′04″      0.4         15.4
-## 30      Nidorina        120  30       2′07″      0.8         44.1
-## 31     Nidoqueen         45  31       4′03″      1.3        132.3
-## 32      Nidoran♂        235  32       1′08″      0.5         19.8
-## 33      Nidorino        120  33       2′11″      0.9         43.0
-## 34      Nidoking         45  34       4′07″      1.4        136.7
-## 35      Clefairy        150  35       2′00″      0.6         16.5
-## 36      Clefable         25  36       4′03″      1.3         88.2
-## 37        Vulpix        190  37       2′00″      0.6         21.8
-## 38     Ninetales         75  38       3′07″      1.1         43.9
-## 39    Jigglypuff        170  39       1′08″      0.5         12.1
-## 40    Wigglytuff         50  40       3′03″      1.0         26.5
-## 41         Zubat        255  41       2′07″      0.8         16.5
-## 42        Golbat         90  42       5′03″      1.6        121.3
-## 43        Oddish        255  43       1′08″      0.5         11.9
-## 44         Gloom        120  44       2′07″      0.8         19.0
-## 45     Vileplume         45  45       3′11″      1.2         41.0
-## 46         Paras        190  46       1′00″      0.3         11.9
-## 47      Parasect         75  47       3′03″      1.0         65.0
-## 48       Venonat        190  48       3′03″      1.0         66.1
-## 49      Venomoth         75  49       4′11″      1.5         27.6
-## 50       Diglett        255  50       0′08″      0.2          1.8
-## 51       Dugtrio         50  51       2′04″      0.7         73.4
-## 52        Meowth        255  52       1′04″      0.4          9.3
-##     Weight_kgs      BMI    Type1    Type2 Total  HP Attack Defense Sp.Atk
-## 1          6.9     14.1    Grass   Poison   318  45     49      49     65
-## 2         13.0     13.0    Grass   Poison   405  60     62      63     80
-## 3        100.0     25.0    Grass   Poison   525  80     82      83    100
-## 4          8.5     23.6     Fire     &lt;NA&gt;   309  39     52      43     60
-## 5         19.0     15.7     Fire     &lt;NA&gt;   405  58     64      58     80
-## 6         90.5     31.3     Fire   Flying   534  78     84      78    109
-## 7          9.0     36.0    Water     &lt;NA&gt;   314  44     48      65     50
-## 8         22.5     22.5    Water     &lt;NA&gt;   405  59     63      80     65
-## 9         85.5     33.4    Water     &lt;NA&gt;   530  79     83     100     85
-## 10         2.9     32.2      Bug     &lt;NA&gt;   195  45     30      35     20
-## 11         9.9     20.2      Bug     &lt;NA&gt;   205  50     20      55     25
-## 12        32.0     26.4      Bug   Flying   395  60     45      50     90
-## 13         3.2     35.6      Bug   Poison   195  40     35      30     20
-## 14        10.0     27.8      Bug   Poison   205  45     25      50     25
-## 15        29.5     29.5      Bug   Poison   395  65     90      40     45
-## 16         1.8     20.0   Normal   Flying   251  40     45      40     35
-## 17        30.0     24.8   Normal   Flying   349  63     60      55     50
-## 18        39.5     17.6   Normal   Flying   479  83     80      75     70
-## 19         3.5     38.9   Normal     &lt;NA&gt;   253  30     56      35     25
-## 20        18.5     37.8   Normal     &lt;NA&gt;   413  55     81      60     50
-## 21         2.0     22.2   Normal   Flying   262  40     60      30     31
-## 22        38.0     26.4   Normal   Flying   442  65     90      65     61
-## 23         6.9      1.7   Poison     &lt;NA&gt;   288  35     60      44     40
-## 24        65.0      5.3   Poison     &lt;NA&gt;   448  60     95      69     65
-## 25         6.0     37.5 Electric     &lt;NA&gt;   320  35     55      40     50
-## 26        30.0     46.9 Electric     &lt;NA&gt;   485  60     90      55     90
-## 27        12.0     33.3   Ground     &lt;NA&gt;   300  50     75      85     20
-## 28        29.5     29.5   Ground     &lt;NA&gt;   450  75    100     110     45
-## 29         7.0     43.8   Poison     &lt;NA&gt;   275  55     47      52     40
-## 30        20.0     31.3   Poison     &lt;NA&gt;   365  70     62      67     55
-## 31        60.0     35.5   Poison   Ground   505  90     92      87     75
-## 32         9.0     36.0   Poison     &lt;NA&gt;   273  46     57      40     40
-## 33        19.5     24.1   Poison     &lt;NA&gt;   365  61     72      57     55
-## 34        62.0     31.6   Poison   Ground   505  81    102      77     85
-## 35         7.5     20.8    Fairy     &lt;NA&gt;   323  70     45      48     60
-## 36        40.0     23.7    Fairy     &lt;NA&gt;   483  95     70      73     95
-## 37         9.9     27.5     Fire     &lt;NA&gt;   299  38     41      40     50
-## 38        19.9     16.4     Fire     &lt;NA&gt;   505  73     76      75     81
-## 39         5.5     22.0   Normal    Fairy   270 115     45      20     45
-## 40        12.0     12.0   Normal    Fairy   435 140     70      45     85
-## 41         7.5     11.7   Poison   Flying   245  40     45      35     30
-## 42        55.0     21.5   Poison   Flying   455  75     80      70     65
-## 43         5.4     21.6    Grass   Poison   320  45     50      55     75
-## 44         8.6     13.4    Grass   Poison   395  60     65      70     85
-## 45        18.6     12.9    Grass   Poison   490  75     80      85    110
-## 46         5.4     60.0      Bug    Grass   285  35     70      55     45
-## 47        29.5     29.5      Bug    Grass   405  60     95      80     60
-## 48        30.0     30.0      Bug   Poison   305  60     55      50     40
-## 49        12.5      5.6      Bug   Poison   450  70     65      60     90
-## 50         0.8     20.0   Ground     &lt;NA&gt;   265  10     55      25     35
-## 51        33.3     68.0   Ground     &lt;NA&gt;   425  35    100      50     50
-## 52         4.2     26.3   Normal     &lt;NA&gt;   290  40     45      35     40
-##     Sp.Def Speed Gen isLegendary
-## 1       65    45   1       FALSE
-## 2       80    60   1       FALSE
-## 3      100    80   1       FALSE
-## 4       50    65   1       FALSE
-## 5       65    80   1       FALSE
-## 6       85   100   1       FALSE
-## 7       64    43   1       FALSE
-## 8       80    58   1       FALSE
-## 9      105    78   1       FALSE
-## 10      20    45   1       FALSE
-## 11      25    30   1       FALSE
-## 12      80    70   1       FALSE
-## 13      20    50   1       FALSE
-## 14      25    35   1       FALSE
-## 15      80    75   1       FALSE
-## 16      35    56   1       FALSE
-## 17      50    71   1       FALSE
-## 18      70   101   1       FALSE
-## 19      35    72   1       FALSE
-## 20      70    97   1       FALSE
-## 21      31    70   1       FALSE
-## 22      61   100   1       FALSE
-## 23      54    55   1       FALSE
-## 24      79    80   1       FALSE
-## 25      50    90   1       FALSE
-## 26      80   110   1       FALSE
-## 27      30    40   1       FALSE
-## 28      55    65   1       FALSE
-## 29      40    41   1       FALSE
-## 30      55    56   1       FALSE
-## 31      85    76   1       FALSE
-## 32      40    50   1       FALSE
-## 33      55    65   1       FALSE
-## 34      75    85   1       FALSE
-## 35      65    35   1       FALSE
-## 36      90    60   1       FALSE
-## 37      65    65   1       FALSE
-## 38     100   100   1       FALSE
-## 39      25    20   1       FALSE
-## 40      50    45   1       FALSE
-## 41      40    55   1       FALSE
-## 42      75    90   1       FALSE
-## 43      65    30   1       FALSE
-## 44      75    40   1       FALSE
-## 45      90    50   1       FALSE
-## 46      55    25   1       FALSE
-## 47      80    30   1       FALSE
-## 48      55    45   1       FALSE
-## 49      75    90   1       FALSE
-## 50      45    95   1       FALSE
-## 51      70   120   1       FALSE
-## 52      40    90   1       FALSE
-##  [ reached getOption(&quot;max.print&quot;) -- omitted 734 rows ]</code></pre>
+df %&gt;% head()</code></pre>
+<pre><code>##         Name Catch_rate # Height (ft) Height_m Weight (lbs) Weight_kgs
+## 1  Bulbasaur         45 1       2′04″      0.7         15.2        6.9
+## 2    Ivysaur         45 2       3′03″      1.0         28.7       13.0
+## 3   Venusaur         45 3       6′07″      2.0        220.5      100.0
+## 4 Charmander         45 4       2′00″      0.6         18.7        8.5
+## 5 Charmeleon         45 5       3′07″      1.1         41.9       19.0
+## 6  Charizard         45 6       5′07″      1.7        199.5       90.5
+##    BMI Type1  Type2 Total HP Attack Defense Sp.Atk Sp.Def Speed Gen
+## 1 14.1 Grass Poison   318 45     49      49     65     65    45   1
+## 2 13.0 Grass Poison   405 60     62      63     80     80    60   1
+## 3 25.0 Grass Poison   525 80     82      83    100    100    80   1
+## 4 23.6  Fire   &lt;NA&gt;   309 39     52      43     60     50    65   1
+## 5 15.7  Fire   &lt;NA&gt;   405 58     64      58     80     65    80   1
+## 6 31.3  Fire Flying   534 78     84      78    109     85   100   1
+##   isLegendary
+## 1       FALSE
+## 2       FALSE
+## 3       FALSE
+## 4       FALSE
+## 5       FALSE
+## 6       FALSE</code></pre>
 <p>In this section, we begin the process of filtering the dataframe. The first step is the remove all the isLegendary pokemon we marked in the beginning of the list.</p>
 <p>The first thing we do is filter away all the legendary pokemon. We do this by filtering all pokemon marked isLegendery with FALSE.</p>
 <p>We then begin by creating a new dataframe everytime by filtering out certain pokemon. For the first three types these new dataframes are labeled by their type - such as fire_dex. For the last three dataframes, these are named after ‘typeless_pokedex’ - as they will be the resulting pokedex after getting rid of Fire, Grass, Water as well as the previous type of the pokemon added to our team.</p>
@@ -1002,7 +858,6 @@ total</code></pre>
 ## 5     Slaking  Normal   670
 ## 6   Dragonite  Dragon   600</code></pre>
 </div>
-</div>
 <div id="using-random-forest-to-predict-each-pokemons-type1" class="section level1">
 <h1>Using Random Forest to predict each Pokemon’s Type1</h1>
 <p>Can we use a Random Forest to predict a Pokemon’s Type1? We’ll use various attributes of each Pokemon to see if we can predict their Type1.</p>
@@ -1041,18 +896,8 @@ testData %&gt;% head()</code></pre>
 ## 5 15.7  Fire   &lt;NA&gt;   405 58     64      58     80     65    80   1
 ## 6 31.3  Fire Flying   534 78     84      78    109     85   100   1</code></pre>
 <p>Our random forest will take into consideration all variables except for BMI (since we’re already considering Height and Weight), Type2 (we’re only trying to predict Type1 and some Pokemon don’t have a Type2), and we’re not using Total since we’ll be using each individual base stat.</p>
-<pre class="r"><code>library(randomForest)</code></pre>
-<pre><code>## randomForest 4.6-14</code></pre>
-<pre><code>## Type rfNews() to see new features/changes/bug fixes.</code></pre>
-<pre><code>## 
-## Attaching package: &#39;randomForest&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:ggplot2&#39;:
-## 
-##     margin</code></pre>
-<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
-## 
-##     combine</code></pre>
-<pre class="r"><code>set.seed(1234)
+<pre class="r"><code>library(randomForest)
+set.seed(1234)
 
 rf &lt;- randomForest(Type1 ~ Catch_rate + Height_m + Weight_kgs + HP + Attack + Defense + Sp.Atk+ Sp.Def + Speed + Gen, importance = TRUE, mtry=1, data = trainingData, na.action=na.exclude)</code></pre>
 <p>After we train the model on our training data, we check whether we can predict the Type1 in our test set.</p>
@@ -1094,176 +939,21 @@ accuracy</code></pre>
 ## 6 31.3  Fire Flying   534 78     84      78    109     85   100   1</code></pre>
 <pre class="r"><code>df &lt;- pokedex.table
 df &lt;- df %&gt;% filter(!is.na(Type2))
-df</code></pre>
-<pre><code>##             Name Catch_rate   # Height (ft) Height_m Weight (lbs)
-## 1      Bulbasaur         45   1       2′04″      0.7         15.2
-## 2        Ivysaur         45   2       3′03″      1.0         28.7
-## 3       Venusaur         45   3       6′07″      2.0        220.5
-## 4      Charizard         45   6       5′07″      1.7        199.5
-## 5     Butterfree         45  12       3′07″      1.1         70.5
-## 6         Weedle        255  13       1′00″      0.3          7.1
-## 7         Kakuna        120  14       2′00″      0.6         22.0
-## 8       Beedrill         45  15       3′03″      1.0         65.0
-## 9         Pidgey        255  16       1′00″      0.3          4.0
-## 10     Pidgeotto        120  17       3′07″      1.1         66.1
-## 11       Pidgeot         45  18       4′11″      1.5         87.1
-## 12       Spearow        255  21       1′00″      0.3          4.4
-## 13        Fearow         90  22       3′11″      1.2         83.8
-## 14     Nidoqueen         45  31       4′03″      1.3        132.3
-## 15      Nidoking         45  34       4′07″      1.4        136.7
-## 16    Jigglypuff        170  39       1′08″      0.5         12.1
-## 17    Wigglytuff         50  40       3′03″      1.0         26.5
-## 18         Zubat        255  41       2′07″      0.8         16.5
-## 19        Golbat         90  42       5′03″      1.6        121.3
-## 20        Oddish        255  43       1′08″      0.5         11.9
-## 21         Gloom        120  44       2′07″      0.8         19.0
-## 22     Vileplume         45  45       3′11″      1.2         41.0
-## 23         Paras        190  46       1′00″      0.3         11.9
-## 24      Parasect         75  47       3′03″      1.0         65.0
-## 25       Venonat        190  48       3′03″      1.0         66.1
-## 26      Venomoth         75  49       4′11″      1.5         27.6
-## 27     Poliwrath         45  62       4′03″      1.3        119.0
-## 28    Bellsprout        255  69       2′04″      0.7          8.8
-## 29    Weepinbell        120  70       3′03″      1.0         14.1
-## 30    Victreebel         45  71       5′07″      1.7         34.2
-## 31     Tentacool        190  72       2′11″      0.9        100.3
-## 32    Tentacruel         60  73       5′03″      1.6        121.3
-## 33       Geodude        255  74       1′04″      0.4         44.1
-## 34      Graveler        120  75       3′03″      1.0        231.5
-## 35         Golem         45  76       4′07″      1.4        661.4
-## 36      Slowpoke        190  79       3′11″      1.2         79.4
-## 37       Slowbro         75  80       5′03″      1.6        173.1
-## 38     Magnemite        190  81       1′00″      0.3         13.2
-## 39      Magneton         60  82       3′03″      1.0        132.3
-## 40    Farfetch&#39;d         45  83       2′07″      0.8         33.1
-## 41         Doduo        190  84       4′07″      1.4         86.4
-## 42        Dodrio         45  85       5′11″      1.8        187.8
-## 43       Dewgong         75  87       5′07″      1.7        264.6
-## 44      Cloyster         60  91       4′11″      1.5        292.1
-## 45        Gastly        190  92       4′03″      1.3          0.2
-## 46       Haunter         90  93       5′03″      1.6          0.2
-## 47        Gengar         45  94       4′11″      1.5         89.3
-## 48          Onix         45  95      28′10″      8.8        463.0
-## 49     Exeggcute         90 102       1′04″      0.4          5.5
-## 50     Exeggutor         45 103       6′07″      2.0        264.6
-## 51       Rhyhorn        120 111       3′03″      1.0        253.5
-## 52        Rhydon         60 112       6′03″      1.9        264.6
-## 53       Starmie         60 121       3′07″      1.1        176.4
-## 54      Mr. Mime         45 122       4′03″      1.3        120.1
-## 55       Scyther         45 123       4′11″      1.5        123.5
-##     Weight_kgs   BMI    Type1    Type2 Total  HP Attack Defense Sp.Atk
-## 1          6.9  14.1    Grass   Poison   318  45     49      49     65
-## 2         13.0  13.0    Grass   Poison   405  60     62      63     80
-## 3        100.0  25.0    Grass   Poison   525  80     82      83    100
-## 4         90.5  31.3     Fire   Flying   534  78     84      78    109
-## 5         32.0  26.4      Bug   Flying   395  60     45      50     90
-## 6          3.2  35.6      Bug   Poison   195  40     35      30     20
-## 7         10.0  27.8      Bug   Poison   205  45     25      50     25
-## 8         29.5  29.5      Bug   Poison   395  65     90      40     45
-## 9          1.8  20.0   Normal   Flying   251  40     45      40     35
-## 10        30.0  24.8   Normal   Flying   349  63     60      55     50
-## 11        39.5  17.6   Normal   Flying   479  83     80      75     70
-## 12         2.0  22.2   Normal   Flying   262  40     60      30     31
-## 13        38.0  26.4   Normal   Flying   442  65     90      65     61
-## 14        60.0  35.5   Poison   Ground   505  90     92      87     75
-## 15        62.0  31.6   Poison   Ground   505  81    102      77     85
-## 16         5.5  22.0   Normal    Fairy   270 115     45      20     45
-## 17        12.0  12.0   Normal    Fairy   435 140     70      45     85
-## 18         7.5  11.7   Poison   Flying   245  40     45      35     30
-## 19        55.0  21.5   Poison   Flying   455  75     80      70     65
-## 20         5.4  21.6    Grass   Poison   320  45     50      55     75
-## 21         8.6  13.4    Grass   Poison   395  60     65      70     85
-## 22        18.6  12.9    Grass   Poison   490  75     80      85    110
-## 23         5.4  60.0      Bug    Grass   285  35     70      55     45
-## 24        29.5  29.5      Bug    Grass   405  60     95      80     60
-## 25        30.0  30.0      Bug   Poison   305  60     55      50     40
-## 26        12.5   5.6      Bug   Poison   450  70     65      60     90
-## 27        54.0  32.0    Water Fighting   510  90     95      95     70
-## 28         4.0   8.2    Grass   Poison   300  50     75      35     70
-## 29         6.4   6.4    Grass   Poison   390  65     90      50     85
-## 30        15.5   5.4    Grass   Poison   490  80    105      65    100
-## 31        45.5  56.2    Water   Poison   335  40     40      35     50
-## 32        55.0  21.5    Water   Poison   515  80     70      65     80
-## 33        20.0 125.0     Rock   Ground   300  40     80     100     30
-## 34       105.0 105.0     Rock   Ground   390  55     95     115     45
-## 35       300.0 153.1     Rock   Ground   495  80    120     130     55
-## 36        36.0  25.0    Water  Psychic   315  90     65      65     40
-## 37        78.5  30.7    Water  Psychic   490  95     75     110    100
-## 38         6.0  66.7 Electric    Steel   325  25     35      70     95
-## 39        60.0  60.0 Electric    Steel   465  50     60      95    120
-## 40        15.0  23.4   Normal   Flying   377  52     90      55     58
-## 41        39.2  20.0   Normal   Flying   310  35     85      45     35
-## 42        85.2  26.3   Normal   Flying   470  60    110      70     60
-## 43       120.0  41.5    Water      Ice   475  90     70      80     70
-## 44       132.5  58.9    Water      Ice   525  50     95     180     85
-## 45         0.1   0.1    Ghost   Poison   310  30     35      30    100
-## 46         0.1   0.0    Ghost   Poison   405  45     50      45    115
-## 47        40.5  18.0    Ghost   Poison   500  60     65      60    130
-## 48       210.0   2.7     Rock   Ground   385  35     45     160     30
-## 49         2.5  15.6    Grass  Psychic   325  60     40      80     60
-## 50       120.0  30.0    Grass  Psychic   530  95     95      85    125
-## 51       115.0 115.0   Ground     Rock   345  80     85      95     30
-## 52       120.0  33.2   Ground     Rock   485 105    130     120     45
-## 53        80.0  66.1    Water  Psychic   520  60     75      85    100
-## 54        54.5  32.2  Psychic    Fairy   460  40     45      65    100
-## 55        56.0  24.9      Bug   Flying   500  70    110      80     55
-##     Sp.Def Speed Gen
-## 1       65    45   1
-## 2       80    60   1
-## 3      100    80   1
-## 4       85   100   1
-## 5       80    70   1
-## 6       20    50   1
-## 7       25    35   1
-## 8       80    75   1
-## 9       35    56   1
-## 10      50    71   1
-## 11      70   101   1
-## 12      31    70   1
-## 13      61   100   1
-## 14      85    76   1
-## 15      75    85   1
-## 16      25    20   1
-## 17      50    45   1
-## 18      40    55   1
-## 19      75    90   1
-## 20      65    30   1
-## 21      75    40   1
-## 22      90    50   1
-## 23      55    25   1
-## 24      80    30   1
-## 25      55    45   1
-## 26      75    90   1
-## 27      90    70   1
-## 28      30    40   1
-## 29      45    55   1
-## 30      70    70   1
-## 31     100    70   1
-## 32     120   100   1
-## 33      30    20   1
-## 34      45    35   1
-## 35      65    45   1
-## 36      40    15   1
-## 37      80    30   1
-## 38      55    45   1
-## 39      70    70   1
-## 40      62    60   1
-## 41      35    75   1
-## 42      60   110   1
-## 43      95    70   1
-## 44      45    70   1
-## 45      35    80   1
-## 46      55    95   1
-## 47      75   110   1
-## 48      45    70   1
-## 49      45    40   1
-## 50      75    55   1
-## 51      30    25   1
-## 52      45    40   1
-## 53      85   115   1
-## 54     120    90   1
-## 55      80   105   1
-##  [ reached getOption(&quot;max.print&quot;) -- omitted 336 rows ]</code></pre>
+df %&gt;% head()</code></pre>
+<pre><code>##         Name Catch_rate  # Height (ft) Height_m Weight (lbs) Weight_kgs
+## 1  Bulbasaur         45  1       2′04″      0.7         15.2        6.9
+## 2    Ivysaur         45  2       3′03″      1.0         28.7       13.0
+## 3   Venusaur         45  3       6′07″      2.0        220.5      100.0
+## 4  Charizard         45  6       5′07″      1.7        199.5       90.5
+## 5 Butterfree         45 12       3′07″      1.1         70.5       32.0
+## 6     Weedle        255 13       1′00″      0.3          7.1        3.2
+##    BMI Type1  Type2 Total HP Attack Defense Sp.Atk Sp.Def Speed Gen
+## 1 14.1 Grass Poison   318 45     49      49     65     65    45   1
+## 2 13.0 Grass Poison   405 60     62      63     80     80    60   1
+## 3 25.0 Grass Poison   525 80     82      83    100    100    80   1
+## 4 31.3  Fire Flying   534 78     84      78    109     85   100   1
+## 5 26.4   Bug Flying   395 60     45      50     90     80    70   1
+## 6 35.6   Bug Poison   195 40     35      30     20     20    50   1</code></pre>
 <p>Now that we’ve got that settled, we’re gonna use our training data set to be Generations 2, 4, and 6. The main reason for picking these generations is because they ensure that all types of pokemon are being looked at – for example, generation 2 introduces Dark and Silver type Pokemon, while Generation 6 introduces Fairy type Pokemon. To test, we’ll set our Pokemon data to be Generations 1, 3 and 5.</p>
 <pre class="r"><code>library(randomForest)
 
@@ -1307,72 +997,14 @@ actuals &lt;- testData[, &quot;Type2&quot;]
 predictions &lt;- predict(rf, testData)
 
 pre.act.df &lt;- as.data.frame(table(predictions, actuals))
-pre.act.df %&gt;% filter(Freq &gt; 0) #%&gt;% head()</code></pre>
-<pre><code>##    predictions  actuals Freq
-## 1       Dragon      Bug    1
-## 2       Flying      Bug    1
-## 3     Fighting     Dark    1
-## 4       Flying     Dark    7
-## 5        Steel     Dark    1
-## 6       Flying   Dragon    4
-## 7       Ground   Dragon    1
-## 8       Flying Electric    3
-## 9        Fairy    Fairy    1
-## 10      Flying    Fairy    8
-## 11     Psychic    Fairy    1
-## 12        Dark Fighting    1
-## 13    Fighting Fighting    1
-## 14      Flying Fighting    8
-## 15       Water Fighting    1
-## 16      Flying     Fire    5
-## 17       Grass     Fire    1
-## 18        Dark   Flying    1
-## 19       Fairy   Flying    1
-## 20    Fighting   Flying    2
-## 21      Flying   Flying   35
-## 22      Ground   Flying    3
-## 23      Normal   Flying    1
-## 24     Psychic   Flying    1
-## 25      Flying    Ghost    4
-## 26      Ground    Ghost    1
-## 27         Ice    Ghost    1
-## 28      Dragon    Grass    1
-## 29      Flying    Grass   11
-## 30        Dark   Ground    4
-## 31      Dragon   Ground    2
-## 32    Fighting   Ground    1
-## 33      Flying   Ground    5
-## 34       Ghost   Ground    2
-## 35      Ground   Ground    1
-## 36      Dragon      Ice    1
-## 37      Flying      Ice    1
-## 38         Ice      Ice    1
-## 39     Psychic      Ice    1
-## 40      Dragon   Poison    1
-## 41       Fairy   Poison    1
-## 42      Flying   Poison   24
-## 43      Dragon  Psychic    1
-## 44       Fairy  Psychic    1
-## 45      Flying  Psychic   10
-## 46      Ground  Psychic    2
-## 47         Ice  Psychic    2
-## 48     Psychic  Psychic    1
-## 49       Water  Psychic    1
-## 50        Dark     Rock    1
-## 51      Flying     Rock    2
-## 52       Ghost     Rock    3
-## 53      Ground     Rock    2
-## 54       Steel     Rock    2
-## 55       Fairy    Steel    1
-## 56    Fighting    Steel    1
-## 57      Flying    Steel    6
-## 58      Normal    Steel    1
-## 59     Psychic    Steel    1
-## 60      Dragon    Water    2
-## 61       Fairy    Water    1
-## 62      Flying    Water    2
-## 63      Ground    Water    2
-## 64       Steel    Water    1</code></pre>
+pre.act.df %&gt;% filter(Freq &gt; 0) %&gt;% head()</code></pre>
+<pre><code>##   predictions actuals Freq
+## 1      Dragon     Bug    1
+## 2      Flying     Bug    1
+## 3    Fighting    Dark    1
+## 4      Flying    Dark    7
+## 5       Steel    Dark    1
+## 6      Flying  Dragon    4</code></pre>
 <pre class="r"><code>correct.predictions &lt;- nrow(pre.act.df[pre.act.df$predictions == pre.act.df$actuals,])
 accuracy &lt;- correct.predictions / nrow(pre.act.df[pre.act.df$Freq &gt; 0,])
 accuracy</code></pre>

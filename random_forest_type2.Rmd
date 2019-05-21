@@ -6,7 +6,7 @@ We're gonna use the Random Forest Model to see if we can use the various differe
 pokedex.table %>% head()
 df <- pokedex.table
 df <- df %>% filter(!is.na(Type2))
-df
+df %>% head()
 ```
 
 Now that we've got that settled, we're gonna use our training data set to be Generations 2, 4, and 6. The main reason for picking these generations is because they ensure that all types of pokemon are being looked at -- for example, generation 2 introduces Dark and Silver type Pokemon, while Generation 6 introduces Fairy type Pokemon. To test, we'll set our Pokemon data to be Generations 1, 3 and 5. 
@@ -28,7 +28,7 @@ actuals <- testData[, "Type2"]
 predictions <- predict(rf, testData)
 
 pre.act.df <- as.data.frame(table(predictions, actuals))
-pre.act.df %>% filter(Freq > 0) #%>% head()
+pre.act.df %>% filter(Freq > 0) %>% head()
 
 correct.predictions <- nrow(pre.act.df[pre.act.df$predictions == pre.act.df$actuals,])
 accuracy <- correct.predictions / nrow(pre.act.df[pre.act.df$Freq > 0,])
