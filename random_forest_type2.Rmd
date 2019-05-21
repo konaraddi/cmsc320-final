@@ -1,0 +1,38 @@
+# Using Random Forest to predict Type1
+
+```{r}
+pokedex.table %>% head()
+df <- pokedex.table
+df <- df %>% filter(!is.na(Type2))
+df
+```
+
+
+```{r}
+library(randomForest)
+
+trainingData <- df[df$Gen == 2 | df$Gen == 4 | df$Gen == 6, ]
+trainingData %>% head()
+testData <- df[df$Gen == 1 | df$Gen == 3 | df$Gen == 5, ]
+testData %>% head()
+
+set.seed(1234)
+```
+
+```{r}
+rf <- randomForest(Type2 ~ Catch_rate + Height_m + Weight_kgs + HP + Attack + Defense + Sp.Atk+ Sp.Def + Speed + Gen, importance = TRUE, mtry=1, data = trainingData, na.action=na.exclude)
+
+actuals <- testData[, "Type2"]
+predictions <- predict(rf, testData)
+
+pre.act.df <- as.data.frame(table(predictions, actuals))
+pre.act.df %>% filter(Freq > 0) %>% head()
+
+correct.predictions <- nrow(pre.act.df[pre.act.df$predictions == pre.act.df$actuals,])
+accuracy <- correct.predictions / nrow(pre.act.df[pre.act.df$Freq > 0,])
+accuracy
+```
+
+
+Our random forest correctly guesses the Type2 for about 24% of the Pokemon. It seems like we can't consistently predict a Pokemon's Type2 based on its stats.
+
