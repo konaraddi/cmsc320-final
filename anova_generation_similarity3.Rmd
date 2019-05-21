@@ -1,0 +1,30 @@
+# Testing Similarity across Generations with the ANOVA/F-test
+
+Are Pokemon across all generations similar to one another? Do newer generations have better stats than previous generations? It's intuitive to think that newer Pokemon would be better than older Pokemon but we'll test our intuition using an ANOVA/F hypothesis test.
+
+In this section we investigate the similarity amongst Defense Damage
+## Defense
+
+Do newer generations have more Defense damage) than previous generations?
+
+First, let's take a look at the average Defense for each generation:
+
+```{r}
+pokedex.table %>%
+  group_by(Gen) %>%
+  summarise(average_Defense = mean(Defense))
+
+```
+
+We can already tell that there seems to be some variation in the average Defense across generations. Unlike the other two ANOVA tests we ran, however, the difference in defense seems to be somewhat marginal. The largest gap we see is between generation VII and gen I (again) where we see a defense gap of almost 10 points. The Question remains however if this variation is statistically significant? Let's use the ANOVA/F-test at 5% level of significance.
+
+$$H_o = $$ no difference between true average Defense across generations
+$$H_a = $$ at least two generations' average Defense are different
+
+```{r}
+res.aov <- aov(Defense ~ Gen, data = pokedex.table)
+summary(res.aov)
+```
+
+We can see here that we have received a F-value of 0.107 which generated a p-value of 0.107. Since our p-value is greater than our level of significance at 0.05, we have insufficient evidence to reject the null hypothesis. We conclude that the average defense amongst generations remains relatively consistent. 
+

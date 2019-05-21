@@ -1,0 +1,121 @@
+Here we will be picking the optimal team. Each pokemon team is comprised of six pokemon. In order to get the best team, we will be picking the pokemons with the highest "total" stat score based on different categories. 
+
+Our first three pokemon will be based on the three standard types, Fire, Water and Grass. The next three will be variable and will simply depend on the next pokemon with the highest base total stats. We are adding the additional requirement that every pokemon needs to be a different type. Although pokemon can have duel type, for the purposes of this analysis, we will be focusing on Type1 primarily, 
+But before we start filtering our lists, we must prepare dataframe first. Additionally we are choosing to omit the legendary pokemons. In this section of R code, we are marking each pokemon with a new column boolean column called isLegendary. We have maintained a previously built list of legendary pokemon to help us with this. 
+
+```{r}
+library(tidyverse)
+library(broom)
+knitr::opts_chunk$set(echo = TRUE)
+pokedex <- pokedex.table
+
+legendaries = c("Zapdos", "Articuno", "Moltres", "Mewtwo",
+                "Mew", "Raikou", "Entei", "Suicune", 
+                "Lugia", "Celebi", 
+                "Regirock", "Regice", "Registeel",
+                "Latias", "Latios", "Kyogre", "Groudon", "Rayquaza",
+                "Jirachi", "Uxie", "Mesprit", "Azelf", "Dialga", 
+                "Palkia", "Heatran", "Regigigas", "Giratina", 
+                "Cresselia", "Phione", "Manaphy", "Darkrai",
+                "Arceus", "Victini", "Reshiram", "Zekrom", 
+                "Kyurem", "Genesect", 
+                "Cobalion" , "Terrakion", "Virizion", "Volcanion", "Solgaleo", "Tapu Fini", "Tapu Bulu", "Xerneas", "Yveltal")
+
+df <- pokedex
+df$isLegendary <- FALSE
+for (i in 1:length(legendaries)) {
+  df$isLegendary[df$Name == legendaries[i]] <- TRUE
+}
+df$isLegendary <- factor(df$isLegendary)
+df
+
+```
+In this section, we begin the process of filtering the dataframe. The first step is the remove all the isLegendary pokemon we marked in the beginning of the list. 
+
+The first thing we do is filter away all the legendary pokemon. We do this by filtering all pokemon marked isLegendery with FALSE. 
+
+We then begin by creating a new dataframe everytime by filtering out certain pokemon. For the first three types these new dataframes are labeled by their type - such as fire_dex. For the last three dataframes, these are named after 'typeless_pokedex' - as they will be the resulting pokedex after getting rid of Fire, Grass, Water as well as the previous type of the pokemon added to our team. 
+
+In each of these 'type' dataframes, we arrange them by Total stats in descending order, and then slice off the first entry (i.e the pokemon with the highest stats of that type). We then combine it together to form a new dataframe. 
+
+We display the final team below. The final team is stored in the variable called Total. 
+
+```{r optimal_team}
+
+
+unlegendary_pokedex <- df %>% filter(isLegendary == FALSE)
+
+fire_dex <- unlegendary_pokedex %>% select(Name, Type1, Total) %>% filter(Type1 == "Fire") %>% arrange(desc(Total))
+
+fire_pokemon <- fire_dex %>% slice(1)
+
+
+water_dex <- unlegendary_pokedex %>% select(Name, Type1, Total) %>% filter(Type1 == "Water") %>% arrange(desc(Total))
+
+water_pokemon <- water_dex %>% slice(1)
+
+
+grass_dex <- unlegendary_pokedex %>% select(Name, Type1, Total) %>% filter(Type1 == "Grass") %>% arrange(desc(Total))
+
+grass_pokemon <- grass_dex %>% slice(1)
+
+total <- rbind(fire_pokemon, water_pokemon)
+total <- rbind(total, grass_pokemon)
+
+typeless_pokedex <- unlegendary_pokedex %>% select(Name, Type1, Total) %>% filter(Type1 != "Water")%>% filter(Type1 != "Fire")%>% filter(Type1 != "Grass") %>% arrange(desc(Total))
+
+total <- rbind(total, slice(typeless_pokedex, 1))
+temp <-  slice(typeless_pokedex, 1)
+previous_type1 <- temp$Type1[1]
+
+typeless_pokedex <- unlegendary_pokedex %>% select(Name, Type1, Total) %>% filter(Type1 != "Water")%>% filter(Type1 != "Fire")%>% filter(Type1 != "Grass") %>% filter(Type1 != previous_type) %>% arrange(desc(Total))
+
+total <- rbind(total, slice(typeless_pokedex, 1))
+temp <-  slice(typeless_pokedex, 1)
+previous_type2 <- temp$Type1[1]
+
+typeless_pokedex <- unlegendary_pokedex %>% select(Name, Type1, Total) %>% filter(Type1 != "Water")%>% filter(Type1 != "Fire")%>% filter(Type1 != "Grass") %>% filter(Type1 != previous_type1) %>% filter(Type1 != previous_type2) %>% arrange(desc(Total))
+
+total <- rbind(total, slice(typeless_pokedex, 1))
+temp <-  slice(typeless_pokedex, 1)
+previous_type <- temp$Type1[1]
+total
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
