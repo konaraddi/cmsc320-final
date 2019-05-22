@@ -16,6 +16,8 @@ In this tutorial, we'll glean rich insights from the [Pokedex](https://pokedex.o
 
 Are Pokemon across all generations similar to one another? Do newer generations have better stats than previous generations? It's intuitive to think that newer Pokemon would be better than older Pokemon but we'll test our intuition using an ANOVA/F hypothesis test.
 
+We can treat the Pokedex as a sample of the population because the in-game Pokemon have some variation in their stats (due to items they hold, what level they are at, where they are caught, how many battles they have won, etc.) and most Pokemon are not unique in the Pokemon games (i.e. you can catch multiple Pokemon of the same Pokedex name and number).
+
 ```{r child = 'anova_generation_similarity.Rmd'}
 ```
 

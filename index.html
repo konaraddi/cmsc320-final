@@ -602,6 +602,7 @@ pokedex.table %&gt;% head()</code></pre>
 <div id="testing-similarity-across-generations-with-the-anovaf-test" class="section level1">
 <h1>Testing Similarity across Generations with the ANOVA/F-test</h1>
 <p>Are Pokemon across all generations similar to one another? Do newer generations have better stats than previous generations? It’s intuitive to think that newer Pokemon would be better than older Pokemon but we’ll test our intuition using an ANOVA/F hypothesis test.</p>
+<p>We can treat the Pokedex as a sample of the population because the in-game Pokemon have some variation in their stats (due to items they hold, what level they are at, where they are caught, how many battles they have won, etc.) and most Pokemon are not unique in the Pokemon games (i.e. you can catch multiple Pokemon of the same Pokedex name and number).</p>
 <div id="hp" class="section level3">
 <h3>HP</h3>
 <p>Do newer generations have more HP (Health Points) than previous generations?</p>
@@ -889,6 +890,7 @@ total</code></pre>
 ## 4      Lunala Psychic   680
 ## 5     Slaking  Normal   670
 ## 6   Dragonite  Dragon   600</code></pre>
+<p>In the Pokemon games, our strongest opponents often have these Pokemon. Dragonite is particularly popular amongst trainers for it’s stats.</p>
 </div>
 <div id="random-forest" class="section level1">
 <h1>Random Forest</h1>
