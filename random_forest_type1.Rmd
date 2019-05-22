@@ -1,4 +1,4 @@
-# Using Random Forest to predict each Pokemon's Type1
+### Predicting each Pokemon's Type1
 
 Can we use a Random Forest to predict a Pokemon's Type1? We'll use various attributes of each Pokemon to see if we can predict their Type1.
 

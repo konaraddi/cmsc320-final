@@ -1,4 +1,4 @@
-## HP
+### HP
 
 Do newer generations have more HP (Health Points) than previous generations?
 

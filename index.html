@@ -582,8 +582,8 @@ pokedex.table %&gt;% head()</code></pre>
 <div id="testing-similarity-across-generations-with-the-anovaf-test" class="section level1">
 <h1>Testing Similarity across Generations with the ANOVA/F-test</h1>
 <p>Are Pokemon across all generations similar to one another? Do newer generations have better stats than previous generations? It’s intuitive to think that newer Pokemon would be better than older Pokemon but we’ll test our intuition using an ANOVA/F hypothesis test.</p>
-<div id="hp" class="section level2">
-<h2>HP</h2>
+<div id="hp" class="section level3">
+<h3>HP</h3>
 <p>Do newer generations have more HP (Health Points) than previous generations?</p>
 <p>First, let’s take a look at the average HP for each generation:</p>
 <pre class="r"><code>pokedex.table %&gt;%
@@ -608,8 +608,8 @@ summary(res.aov)</code></pre>
 ## Residuals   779 528799   678.8</code></pre>
 <p>We can see that there’s a 14.9% of us seeing values as extreme as the above which is greater than our 5% level of significance. Therefore, we do not reject the null hypothesis (<span class="math inline">\(H_o\)</span>). We conclude that the generations do not vary in HP at 5% level of significance.</p>
 </div>
-<div id="attack" class="section level2">
-<h2>Attack</h2>
+<div id="attack" class="section level3">
+<h3>Attack</h3>
 <p>Do newer generations have more Attack than previous generations?</p>
 <p>First, let’s take a look at the average attack for each generation:</p>
 <pre class="r"><code>library(dplyr)
@@ -638,8 +638,8 @@ summary(res.aov)</code></pre>
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>We can see here that we have received a F-value of 4.525 which generates a p-value extremely small (0.000161. Therefore, we have sufficient evidence to reject the null hypothesis (<span class="math inline">\(H_o\)</span>). We conclude that at least two generations vary with their attack.</p>
 </div>
-<div id="defense" class="section level2">
-<h2>Defense</h2>
+<div id="defense" class="section level3">
+<h3>Defense</h3>
 <p>Do newer generations have more Defense than previous generations?</p>
 <p>First, let’s take a look at the average Defense for each generation:</p>
 <pre class="r"><code>pokedex.table %&gt;%
@@ -667,10 +667,21 @@ summary(res.aov)</code></pre>
 </div>
 <div id="linear-regression" class="section level1">
 <h1>Linear Regression</h1>
+<div id="bmi-vs-total-base-stat" class="section level3">
+<h3>BMI vs Total Base Stat</h3>
 <p>Now, we are gonna answer the following question: How does height and weight (in other words, BMI) of a Pokemon correlate with its various base stats?</p>
 <p>To do so, we’re gonna use a linear regression model that plots the BMI vs. the Total. Right now, the total is defined as the sum of all the base stats, which include HP, Attack, Defense, Sp. Atk, Sp. Def, and speed. BMI, or Body Mass Index, is calculated as the kg/m^2. Let’s plot the graph of BMI vs. the Total Base Stats using ggplot().</p>
-<pre class="r"><code>  library(tidyverse)
-  library(broom)
+<pre class="r"><code>  library(tidyverse)</code></pre>
+<pre><code>## ── Attaching packages ─────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
+<pre><code>## ✔ ggplot2 3.1.0     ✔ purrr   0.3.0
+## ✔ tibble  2.0.1     ✔ stringr 1.3.1
+## ✔ readr   1.3.1     ✔ forcats 0.3.0</code></pre>
+<pre><code>## ── Conflicts ────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter()         masks stats::filter()
+## ✖ readr::guess_encoding() masks rvest::guess_encoding()
+## ✖ dplyr::lag()            masks stats::lag()
+## ✖ purrr::pluck()          masks rvest::pluck()</code></pre>
+<pre class="r"><code>  library(broom)
   pokedex &lt;- pokedex.table
   
   pokedex %&gt;%
@@ -713,6 +724,9 @@ confidence_interval &lt;- round(c(auto_fit_stats$estimate[2] - confidence_interv
                                auto_fit_stats$estimate[2],
                                auto_fit_stats$estimate[2] + confidence_interval_offset), 4)</code></pre>
 <p>Given our confidence interval, we would say that on average, for every k/m^2, we are 95% confident that the base stats will lie within (-0.3392, 0.0164) fewer.</p>
+</div>
+<div id="bmi-vs-catch-rate" class="section level3">
+<h3>BMI vs Catch Rate</h3>
 <p>Our goal now is to investigate how height and weight (BMI) of a pokemon correlate to its capture rate.</p>
 <p>We will assess this correlation by fitting a linear regression model that will plot BMI vs Capture rate. BMI (body mass index) will be calculated as kg/m^2. We will start by plotting the graph of BMI vs capture rate using the ggplot() function.</p>
 <p>Setup:</p>
@@ -761,7 +775,11 @@ confidence_interval_offset), 4)
 confidence_interval</code></pre>
 <pre><code>## [1] -0.0768  0.0469  0.1705</code></pre>
 <p>Given the confidence interval, we would conclude that, on average for each k/m^2, we can have 95% confidence that the catch rate will lie within (-0.0768, 0.1705) interval.</p>
-<p>Here we will be picking the optimal team. Each pokemon team is comprised of six pokemon. In order to get the best team, we will be picking the pokemons with the highest “total” stat score based on different categories.</p>
+</div>
+</div>
+<div id="the-optimal-team" class="section level1">
+<h1>The Optimal Team</h1>
+<p>Here we will be picking the optimal team; best set of pokemon to use in battle. Each pokemon team is comprised of six pokemon. In order to get the best team, we will be picking the pokemons with the highest “total” stat score based on different categories.</p>
 <p>Our first three pokemon will be based on the three standard types, Fire, Water and Grass. The next three will be variable and will simply depend on the next pokemon with the highest base total stats. We are adding the additional requirement that every pokemon needs to be a different type. Although pokemon can have duel type, for the purposes of this analysis, we will be focusing on Type1 primarily, But before we start filtering our lists, we must prepare dataframe first. Additionally we are choosing to omit the legendary pokemons. In this section of R code, we are marking each pokemon with a new column boolean column called isLegendary. We have maintained a previously built list of legendary pokemon to help us with this.</p>
 <pre class="r"><code>library(tidyverse)
 library(broom)
@@ -858,8 +876,10 @@ total</code></pre>
 ## 5     Slaking  Normal   670
 ## 6   Dragonite  Dragon   600</code></pre>
 </div>
-<div id="using-random-forest-to-predict-each-pokemons-type1" class="section level1">
-<h1>Using Random Forest to predict each Pokemon’s Type1</h1>
+<div id="random-forest" class="section level1">
+<h1>Random Forest</h1>
+<div id="predicting-each-pokemons-type1" class="section level3">
+<h3>Predicting each Pokemon’s Type1</h3>
 <p>Can we use a Random Forest to predict a Pokemon’s Type1? We’ll use various attributes of each Pokemon to see if we can predict their Type1.</p>
 <p>First we split our data into training and testing sets. Our training set will be Generations 2, 4, and 6. Our test set will be Generations 1, 3, and 5.</p>
 <pre class="r"><code>df &lt;- pokedex.table
@@ -896,8 +916,18 @@ testData %&gt;% head()</code></pre>
 ## 5 15.7  Fire   &lt;NA&gt;   405 58     64      58     80     65    80   1
 ## 6 31.3  Fire Flying   534 78     84      78    109     85   100   1</code></pre>
 <p>Our random forest will take into consideration all variables except for BMI (since we’re already considering Height and Weight), Type2 (we’re only trying to predict Type1 and some Pokemon don’t have a Type2), and we’re not using Total since we’ll be using each individual base stat.</p>
-<pre class="r"><code>library(randomForest)
-set.seed(1234)
+<pre class="r"><code>library(randomForest)</code></pre>
+<pre><code>## randomForest 4.6-14</code></pre>
+<pre><code>## Type rfNews() to see new features/changes/bug fixes.</code></pre>
+<pre><code>## 
+## Attaching package: &#39;randomForest&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:ggplot2&#39;:
+## 
+##     margin</code></pre>
+<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
+## 
+##     combine</code></pre>
+<pre class="r"><code>set.seed(1234)
 
 rf &lt;- randomForest(Type1 ~ Catch_rate + Height_m + Weight_kgs + HP + Attack + Defense + Sp.Atk+ Sp.Def + Speed + Gen, importance = TRUE, mtry=1, data = trainingData, na.action=na.exclude)</code></pre>
 <p>After we train the model on our training data, we check whether we can predict the Type1 in our test set.</p>
@@ -919,8 +949,8 @@ accuracy</code></pre>
 <pre><code>## [1] 0.1666667</code></pre>
 <p>Our random forest correctly guesses the Type1 for 15-17% of the Pokemon. It seems like we can’t consistently predict a Pokemon’s Type1 using a random forest on its attributes.</p>
 </div>
-<div id="using-random-forest-to-predict-type2" class="section level1">
-<h1>Using Random Forest to predict Type2</h1>
+<div id="predicting-each-pokemons-type2" class="section level3">
+<h3>Predicting each Pokemon’s Type2</h3>
 <p>We’re gonna use the Random Forest Model to see if we can use the various different stats of each Pokemon to see if we can predict its Type2. To do so we’re gonna filter out all of the Pokemon that don’t have a Type2, so that the model doesn’t get confused at all the NA Values.</p>
 <pre class="r"><code>pokedex.table %&gt;% head()</code></pre>
 <pre><code>##         Name Catch_rate # Height (ft) Height_m Weight (lbs) Weight_kgs
@@ -1011,8 +1041,8 @@ accuracy</code></pre>
 <pre><code>## [1] 0.28125</code></pre>
 <p>Our random forest correctly guesses the Type2 for about 28-32% of the Pokemon. It seems like we can’t consistently predict a Pokemon’s Type2 based on its stats, although we have a much higher rate then predicting Type 1. Oddly enough, it appears that it got 35-38 out of 43 on flying types, so it may seem like some data is correlated.</p>
 </div>
-<div id="random-forest-for-classifying-legendaries" class="section level1">
-<h1>Random Forest for Classifying Legendaries</h1>
+<div id="classifying-legendaries" class="section level3">
+<h3>Classifying Legendaries</h3>
 <p>Can we use a Random Forest to classify legendaries?</p>
 <p>First, we’ll label our data set with legendaries using the list here: <a href="https://bulbapedia.bulbagarden.net/wiki/Legendary_Pokémon" class="uri">https://bulbapedia.bulbagarden.net/wiki/Legendary_Pokémon</a></p>
 <pre class="r"><code>legendaries = c(&quot;Zapdos&quot;, &quot;Articuno&quot;, &quot;Moltres&quot;, &quot;Mewtwo&quot;,
@@ -1127,6 +1157,7 @@ testData.subset %&gt;%
 <p>Mew was our false negative. This is reasonably hard to predict because Mew is unusually easy to catch for being a legendary Pokemon. This is probably why the random forest couldn’t predict it was legendary.</p>
 <p>Beldum, Metang, and Metagross are the first, second, and third evoluation stages of the same Pokemon. Metagross, the final evolution, has battle stats that are on par with legendary Pokemon but is technically not considered legendary. Metagross is one of the <a href="https://bulbapedia.bulbagarden.net/wiki/Pseudo-legendary_Pokémon">pseudo-legendary</a> Pokemon.</p>
 <p>Overall, our random forest proved to be good at classifying legendaries based on the <code>Total</code> and <code>Catch_rate</code>.</p>
+</div>
 </div>
 
 

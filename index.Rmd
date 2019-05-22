@@ -33,8 +33,12 @@ Are Pokemon across all generations similar to one another? Do newer generations 
 ```{r child = 'linear_regression_BMI_capturerate.Rmd'}
 ```
 
+# The Optimal Team
+
 ```{r child = 'PickOptimalTeam.Rmd'}
 ```
+
+# Random Forest
 
 ```{r child = 'random_forest_type1.Rmd'}
 ```

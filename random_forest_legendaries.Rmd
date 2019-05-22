@@ -1,4 +1,4 @@
-# Random Forest for Classifying Legendaries
+### Classifying Legendaries
 
 Can we use a Random Forest to classify legendaries?
 

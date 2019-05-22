@@ -1,3 +1,5 @@
+### BMI vs Catch Rate
+
 Our goal now is to investigate how height and weight (BMI) of a pokemon correlate to its capture rate. 
 
 We will assess this correlation by fitting a linear regression model that will plot BMI vs Capture rate. BMI (body mass index) will be calculated as kg/m^2. We will start by plotting the graph of BMI vs capture rate using the ggplot() function. 

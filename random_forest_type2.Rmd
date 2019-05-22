@@ -1,4 +1,4 @@
-# Using Random Forest to predict Type2
+### Predicting each Pokemon's Type2
 
 We're gonna use the Random Forest Model to see if we can use the various different stats of each Pokemon to see if we can predict its Type2. To do so we're gonna filter out all of the Pokemon that don't have a Type2, so that the model doesn't get confused at all the NA Values. 
 
