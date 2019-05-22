@@ -2,7 +2,7 @@
 title: CMSC320 Final Project  
 output: 
   html_document:
-    toc: no
+    toc: yes
 ---
 
 **written by Dinakar Chappa, Prashant Krishnan and Omkar Konaraddi**

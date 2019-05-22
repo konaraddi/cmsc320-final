@@ -12,8 +12,9 @@ pokedex.table %>%
 
 We can see some variation in the HP across generations; Generation IV Pokemon have, on average, around 8 more HP than the Generation I Pokemon. But is this statistically significant? Let's use the ANOVA/F-test at 5% level of significance.
 
-$H_o = $ no difference between true average HP across generations
-$H_a = $ at least two generations' average HP are different
+$H_o =$ no difference between true average HP across generations
+
+$H_a =$ at least two generations' average HP are different
 
 ```{r}
 res.aov <- aov(HP ~ Gen, data = pokedex.table)

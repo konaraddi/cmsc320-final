@@ -15,8 +15,9 @@ pokedex.table %>%
 
 We can already tell that there seems to be some variation in the average attack across generations. We can see that average attack of generation VII are more than 10 than the average of Gen I. At the same time however, we see that gen I, III, and VI are almost exactly the same with their average attack. The Question remains however if this variation is statistically significant? Let's use the ANOVA/F-test at 5% level of significance.
 
-$H_o = $ no difference between true average attack across generations
-$H_a = $ at least two generations' average attack are different
+$H_o =$ no difference between true average attack across generations
+
+$H_a =$ at least two generations' average attack are different
 
 ```{r}
 res.aov <- aov(Attack ~ Gen, data = pokedex.table)

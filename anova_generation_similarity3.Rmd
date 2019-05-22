@@ -13,8 +13,9 @@ pokedex.table %>%
 
 We can already tell that there seems to be some variation in the average Defense across generations. Unlike the other two ANOVA tests we ran, however, the difference in defense seems to be somewhat marginal. The largest gap we see is between generation VII and gen I (again) where we see a defense gap of almost 10 points. The Question remains however if this variation is statistically significant? Let's use the ANOVA/F-test at 5% level of significance.
 
-$H_o = $ no difference between true average Defense across generations
-$H_a = $ at least two generations' average Defense are different
+$H_o =$ no difference between true average Defense across generations
+
+$H_a =$ at least two generations' average Defense are different
 
 ```{r}
 res.aov <- aov(Defense ~ Gen, data = pokedex.table)

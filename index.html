@@ -372,6 +372,26 @@ $(document).ready(function () {
 
 </div>
 
+<div id="TOC">
+<ul>
+<li><a href="#scraping-the-data">Scraping the data</a></li>
+<li><a href="#testing-similarity-across-generations-with-the-anovaf-test">Testing Similarity across Generations with the ANOVA/F-test</a><ul>
+<li><a href="#hp">HP</a></li>
+<li><a href="#attack">Attack</a></li>
+<li><a href="#defense">Defense</a></li>
+</ul></li>
+<li><a href="#linear-regression">Linear Regression</a><ul>
+<li><a href="#bmi-vs-total-base-stat">BMI vs Total Base Stat</a></li>
+<li><a href="#bmi-vs-catch-rate">BMI vs Catch Rate</a></li>
+</ul></li>
+<li><a href="#the-optimal-team">The Optimal Team</a></li>
+<li><a href="#random-forest">Random Forest</a><ul>
+<li><a href="#predicting-each-pokemons-type1">Predicting each Pokemon’s Type1</a></li>
+<li><a href="#predicting-each-pokemons-type2">Predicting each Pokemon’s Type2</a></li>
+<li><a href="#classifying-legendaries">Classifying Legendaries</a></li>
+</ul></li>
+</ul>
+</div>
 
 <p><strong>written by Dinakar Chappa, Prashant Krishnan and Omkar Konaraddi</strong></p>
 <p>In this tutorial, we’ll glean rich insights from the <a href="https://pokedex.org/">Pokedex</a>, a database of all Pokemon and their attributes, using various techniques and tools from CMSC320.</p>
@@ -600,7 +620,8 @@ pokedex.table %&gt;% head()</code></pre>
 ## 6 6           68.6
 ## 7 7           71.4</code></pre>
 <p>We can see some variation in the HP across generations; Generation IV Pokemon have, on average, around 8 more HP than the Generation I Pokemon. But is this statistically significant? Let’s use the ANOVA/F-test at 5% level of significance.</p>
-<p>$H_o = $ no difference between true average HP across generations $H_a = $ at least two generations’ average HP are different</p>
+<p><span class="math inline">\(H_o =\)</span> no difference between true average HP across generations</p>
+<p><span class="math inline">\(H_a =\)</span> at least two generations’ average HP are different</p>
 <pre class="r"><code>res.aov &lt;- aov(HP ~ Gen, data = pokedex.table)
 summary(res.aov)</code></pre>
 <pre><code>##              Df Sum Sq Mean Sq F value Pr(&gt;F)
@@ -628,7 +649,8 @@ pokedex.table %&gt;%
 ## 6 6               72.1
 ## 7 7               85.7</code></pre>
 <p>We can already tell that there seems to be some variation in the average attack across generations. We can see that average attack of generation VII are more than 10 than the average of Gen I. At the same time however, we see that gen I, III, and VI are almost exactly the same with their average attack. The Question remains however if this variation is statistically significant? Let’s use the ANOVA/F-test at 5% level of significance.</p>
-<p>$H_o = $ no difference between true average attack across generations $H_a = $ at least two generations’ average attack are different</p>
+<p><span class="math inline">\(H_o =\)</span> no difference between true average attack across generations</p>
+<p><span class="math inline">\(H_a =\)</span> at least two generations’ average attack are different</p>
 <pre class="r"><code>res.aov &lt;- aov(Attack ~ Gen, data = pokedex.table)
 summary(res.aov)</code></pre>
 <pre><code>##              Df Sum Sq Mean Sq F value   Pr(&gt;F)    
@@ -656,7 +678,8 @@ summary(res.aov)</code></pre>
 ## 6 6                73.0
 ## 7 7                79.4</code></pre>
 <p>We can already tell that there seems to be some variation in the average Defense across generations. Unlike the other two ANOVA tests we ran, however, the difference in defense seems to be somewhat marginal. The largest gap we see is between generation VII and gen I (again) where we see a defense gap of almost 10 points. The Question remains however if this variation is statistically significant? Let’s use the ANOVA/F-test at 5% level of significance.</p>
-<p>$H_o = $ no difference between true average Defense across generations $H_a = $ at least two generations’ average Defense are different</p>
+<p><span class="math inline">\(H_o =\)</span> no difference between true average Defense across generations</p>
+<p><span class="math inline">\(H_a =\)</span> at least two generations’ average Defense are different</p>
 <pre class="r"><code>res.aov &lt;- aov(Defense ~ Gen, data = pokedex.table)
 summary(res.aov)</code></pre>
 <pre><code>##              Df Sum Sq Mean Sq F value Pr(&gt;F)
@@ -671,17 +694,8 @@ summary(res.aov)</code></pre>
 <h3>BMI vs Total Base Stat</h3>
 <p>Now, we are gonna answer the following question: How does height and weight (in other words, BMI) of a Pokemon correlate with its various base stats?</p>
 <p>To do so, we’re gonna use a linear regression model that plots the BMI vs. the Total. Right now, the total is defined as the sum of all the base stats, which include HP, Attack, Defense, Sp. Atk, Sp. Def, and speed. BMI, or Body Mass Index, is calculated as the kg/m^2. Let’s plot the graph of BMI vs. the Total Base Stats using ggplot().</p>
-<pre class="r"><code>  library(tidyverse)</code></pre>
-<pre><code>## ── Attaching packages ─────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
-<pre><code>## ✔ ggplot2 3.1.0     ✔ purrr   0.3.0
-## ✔ tibble  2.0.1     ✔ stringr 1.3.1
-## ✔ readr   1.3.1     ✔ forcats 0.3.0</code></pre>
-<pre><code>## ── Conflicts ────────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter()         masks stats::filter()
-## ✖ readr::guess_encoding() masks rvest::guess_encoding()
-## ✖ dplyr::lag()            masks stats::lag()
-## ✖ purrr::pluck()          masks rvest::pluck()</code></pre>
-<pre class="r"><code>  library(broom)
+<pre class="r"><code>  library(tidyverse)
+  library(broom)
   pokedex &lt;- pokedex.table
   
   pokedex %&gt;%
@@ -916,18 +930,8 @@ testData %&gt;% head()</code></pre>
 ## 5 15.7  Fire   &lt;NA&gt;   405 58     64      58     80     65    80   1
 ## 6 31.3  Fire Flying   534 78     84      78    109     85   100   1</code></pre>
 <p>Our random forest will take into consideration all variables except for BMI (since we’re already considering Height and Weight), Type2 (we’re only trying to predict Type1 and some Pokemon don’t have a Type2), and we’re not using Total since we’ll be using each individual base stat.</p>
-<pre class="r"><code>library(randomForest)</code></pre>
-<pre><code>## randomForest 4.6-14</code></pre>
-<pre><code>## Type rfNews() to see new features/changes/bug fixes.</code></pre>
-<pre><code>## 
-## Attaching package: &#39;randomForest&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:ggplot2&#39;:
-## 
-##     margin</code></pre>
-<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
-## 
-##     combine</code></pre>
-<pre class="r"><code>set.seed(1234)
+<pre class="r"><code>library(randomForest)
+set.seed(1234)
 
 rf &lt;- randomForest(Type1 ~ Catch_rate + Height_m + Weight_kgs + HP + Attack + Defense + Sp.Atk+ Sp.Def + Speed + Gen, importance = TRUE, mtry=1, data = trainingData, na.action=na.exclude)</code></pre>
 <p>After we train the model on our training data, we check whether we can predict the Type1 in our test set.</p>
